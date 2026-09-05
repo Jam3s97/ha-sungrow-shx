@@ -1,0 +1,57 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect to your Sungrow inverter",
+        "data": {
+          "modbus_type": "Connection type"
+        }
+      },
+      "tcp": {
+        "title": "Modbus TCP connection",
+        "data": {
+          "host": "Host",
+          "port": "Port",
+          "unit_id": "Modbus unit"
+        },
+        "data_description": {
+          "host": "Hostname or IP address of the inverter or its LAN/Wi-Fi dongle.",
+          "unit_id": "The inverter's Modbus station address (default: 1)."
+        }
+      },
+      "serial": {
+        "title": "Modbus serial (RS485) connection",
+        "data": {
+          "host": "Serial device",
+          "baudrate": "Baud rate",
+          "parity": "Parity",
+          "stopbits": "Stop bits",
+          "bytesize": "Data bits",
+          "unit_id": "Modbus unit"
+        },
+        "data_description": {
+          "host": "Serial device path, e.g. /dev/ttyUSB0.",
+          "unit_id": "The inverter's Modbus station address (default: 1)."
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect. Check the connection details and that the inverter is reachable."
+    },
+    "abort": {
+      "already_configured": "This inverter is already configured."
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "is_pv_generating": { "name": "PV generating" },
+      "is_battery_charging": { "name": "Battery charging" },
+      "is_importing_from_grid": { "name": "Importing from grid" },
+      "is_running": { "name": "Running" }
+    },
+    "button": {
+      "start_inverter": { "name": "Start inverter" },
+      "stop_inverter": { "name": "Stop inverter" }
+    }
+  }
+}
