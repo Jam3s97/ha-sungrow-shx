@@ -36,3 +36,7 @@ max-complexity = 25
 # expected values is the point of a test, and fixture/monkeypatch fakes take
 # arguments only to match the signature they are replacing.
 "tests/*" = ["ANN201", "ARG001", "D100", "D101", "D102", "D103", "PLR2004", "S101"]
+
+# Dev-tooling scripts are small CLIs -- printing their report to the user is
+# the point, not something to route through logging.
+"scripts/*.py" = ["T201"]
