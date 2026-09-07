@@ -111,7 +111,7 @@ class SungrowSHx:
             if not hit:
                 continue
             _LOGGER.warning(
-                "%s does not answer %s registers %d-%d; %s will read as " "unavailable",
+                "%s does not answer %s registers %d-%d; %s will read as unavailable",
                 type(component).__name__,
                 block.space,
                 block.address,
