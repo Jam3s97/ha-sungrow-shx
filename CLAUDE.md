@@ -11,13 +11,18 @@ The integration gets its Modbus connection from Home Assistant core's Modbus int
 ## Commands
 
 ```bash
-scripts/setup       # install requirements_common.txt + requirements_dev.txt
+scripts/setup       # install requirements_common.txt + requirements_test.txt (dev + lint + test, transitively)
 scripts/develop     # run a local HA instance against ./config with the integration loaded (PYTHONPATH trick, no symlinks)
 scripts/lint        # ruff format . && ruff check . --fix
+scripts/test        # pytest (accepts pytest args, e.g. scripts/test -k config_flow)
 scripts/sync-vendor # pull custom_components/sungrow/sungrow_modbus/ from github.com/Jam3s97/sungrow-modbus (default ref: main)
 ```
 
-There is no test suite in this repo. CI (`.github/workflows/`) runs `ruff check` / `ruff format --check` (lint.yml) and `hassfest` + `hacs` structural validation (validate.yml) on every push/PR to `main`.
+CI (`.github/workflows/`) runs `ruff check` / `ruff format --check` (lint.yml), the `tests/` suite (test.yml), and `hassfest` + `hacs` structural validation (validate.yml) on every push/PR to `main`.
+
+### Tests (`tests/`)
+
+Everything under `tests/` runs against `modbus_connection`'s in-memory mock backend (`MockModbusUnit`, via its auto-registered pytest plugin) and `pytest-homeassistant-custom-component` -- never real hardware or a real socket. `homeassistant.components.modbus.async_get_unit`/`async_get_temporary_unit` are monkeypatched (see `patch_async_get_unit`/`patch_async_get_temporary_unit` in `tests/conftest.py`) to hand out the mock unit instead of opening a connection, so the full config-flow -> setup -> entity-generation path is exercised without touching Modbus at all. `tests/conftest.py::loaded_unit` preloads one realistic register per field the suite exercises; `setup_integration` fully sets up a config entry against it for the platform tests, which look entities up by `unique_id` through the entity registry (`tests/helpers.py::entity_id_for`) rather than by guessing entity_ids. Note `requirements_test.txt` also pins `pymodbus` directly: `manifest.json`'s hard `dependencies: ["modbus"]` pulls in HA core's `modbus` component, whose own manifest requires `pymodbus` even though this integration only ever goes through the tmodbus-backed shared connection pool -- HA installs it automatically at runtime, but the test environment needs it pinned explicitly.
 
 Ruff config (`.ruff.toml`) selects `ALL` rules, targets py314, and excludes `custom_components/sungrow/sungrow_modbus/` from formatting -- that directory is a vendored library with its own upstream style (see below).
 
