@@ -55,7 +55,7 @@ async def async_setup_entry(
     async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
     """Set up Sungrow numbers: every writable, non-enum, non-boolean field."""
-    coordinator = entry.runtime_data.coordinator
+    coordinator = entry.runtime_data
     descriptions = [
         _description_for(field)
         for field in iter_fields(coordinator.device)

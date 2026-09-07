@@ -9,14 +9,13 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from homeassistant.components.modbus import async_get_unit
 from homeassistant.const import Platform
-from homeassistant.exceptions import ConfigEntryNotReady
-from modbus_connection import ModbusError
+from homeassistant.exceptions import ConfigEntryNotReady, HomeAssistantError
 
 from .const import CONF_UNIT_ID
 from .coordinator import SungrowDataUpdateCoordinator
-from .data import SungrowData
-from .modbus import build_connection
+from .modbus import build_params
 from .sungrow_modbus import SungrowSHx
 
 if TYPE_CHECKING:
@@ -38,35 +37,29 @@ async def async_setup_entry(hass: HomeAssistant, entry: SungrowConfigEntry) -> b
     """
     Set up Sungrow from a config entry.
 
-    This integration owns its Modbus connection outright (see
-    :mod:`.modbus`): it does not depend on any shared core component, so it
-    works standalone as a HACS package.
+    The Modbus unit comes from Home Assistant core's Modbus integration (see
+    :mod:`.modbus`), which shares one connection per physical endpoint across
+    every integration that asks it for a unit -- so this entry's connection
+    is pooled with any other integration or entry talking to the same
+    inverter or gateway, instead of opening a competing link of its own.
     """
-    connection = build_connection(dict(entry.data))
+    params = build_params(dict(entry.data))
     try:
-        await connection.connect()
-    except (ModbusError, OSError) as err:
-        msg = f"Could not connect to the inverter: {err}"
+        unit = async_get_unit(hass, entry, params, int(entry.data[CONF_UNIT_ID]))
+    except HomeAssistantError as err:
+        msg = f"Could not claim the Modbus connection: {err}"
         raise ConfigEntryNotReady(msg) from err
 
-    device = SungrowSHx(connection.for_unit(int(entry.data[CONF_UNIT_ID])))
+    device = SungrowSHx(unit)
     coordinator = SungrowDataUpdateCoordinator(hass, entry, device)
+    await coordinator.async_config_entry_first_refresh()
 
-    try:
-        await coordinator.async_config_entry_first_refresh()
-    except Exception:
-        await connection.close()
-        raise
-
-    entry.runtime_data = SungrowData(connection=connection, coordinator=coordinator)
+    entry.runtime_data = coordinator
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     return True
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: SungrowConfigEntry) -> bool:
-    """Unload a config entry, closing the Modbus connection it owns."""
-    unloaded = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
-    if unloaded:
-        await entry.runtime_data.connection.close()
-    return unloaded
+    """Unload a config entry."""
+    return await hass.config_entries.async_unload_platforms(entry, PLATFORMS)

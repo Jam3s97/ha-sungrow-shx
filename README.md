@@ -6,9 +6,9 @@
 
 A [HACS](https://hacs.xyz/) custom integration for **Sungrow SHx** hybrid inverters (SH3.0RS through SH25T, with an SBR-series or compatible battery), talking directly to the inverter over Modbus TCP or a serial/RS485 gateway. No cloud account, no iSolarCloud dependency.
 
-This repository packages [`sungrow-modbus`](https://pypi.org/project/sungrow-modbus/) -- a standalone, transport-independent Modbus device library -- into a ready-to-install Home Assistant custom component. The library is vendored under `custom_components/sungrow/sungrow_modbus/` so the integration has no dependency on a matching PyPI release landing first; only the underlying `modbus-connection` transport library is installed from PyPI.
+This repository packages [`sungrow-modbus`](https://pypi.org/project/sungrow-modbus/) -- a standalone, transport-independent Modbus device library -- into a ready-to-install Home Assistant custom component. The library is vendored under `custom_components/sungrow/sungrow_modbus/` so the integration has no dependency on a matching PyPI release landing first; only the underlying `modbus-connection` framework is installed from PyPI.
 
-This package is standalone by design: it manages its own Modbus connection directly rather than depending on Home Assistant core's shared-connection mechanism, so it installs and works today without waiting on anything else to land upstream.
+The integration gets its Modbus connection from Home Assistant core's own Modbus integration (requires HA 2026.9 or newer), which pools one connection per physical endpoint across every integration or config entry talking to the same device -- useful since some inverters and RS485 gateways only accept a handful of simultaneous Modbus sessions.
 
 ## What you get
 

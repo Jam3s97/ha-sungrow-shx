@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 A [HACS](https://hacs.xyz/) custom integration for **Sungrow SHx** hybrid inverters (SH3.0RS through SH25T), talking directly to the inverter over Modbus TCP or serial/RS485 -- no cloud/iSolarCloud dependency. It follows the [`integration_blueprint`](https://github.com/ludeeus/integration_blueprint) project layout.
 
-The integration is standalone by design: it owns its own Modbus connection via the `modbus-connection` PyPI package rather than depending on Home Assistant core's shared Modbus component, so it installs and works without waiting on anything upstream.
+The integration gets its Modbus connection from Home Assistant core's Modbus integration (`homeassistant.components.modbus.async_get_unit`/`async_get_temporary_unit`, shipped in HA 2026.9 -- see "Modernizing Modbus in Home Assistant 2026.9"), which pools one connection per physical endpoint across every integration/entry that asks for a unit on it. This is a hard `dependencies: ["modbus"]` in `manifest.json`, and sets the HACS-declared minimum HA version (`hacs.json`) to `2026.9.0`.
 
 ## Commands
 
@@ -26,8 +26,8 @@ Ruff config (`.ruff.toml`) selects `ALL` rules, targets py314, and excludes `cus
 
 `custom_components/sungrow/` has two distinct layers that must not be conflated:
 
-1. **`sungrow_modbus/`** -- a vendored, transport-independent device library (mirrors the PyPI package [`sungrow-modbus`](https://pypi.org/project/sungrow-modbus/)). It knows nothing about Home Assistant. It models the inverter as a `SungrowSHx` object composed of `Component` subsystems (from the `modbus_connection.model` framework), each owning a Modbus register block. It is vendored so the integration isn't blocked on a matching PyPI release; the underlying `modbus-connection` transport library is a real PyPI dependency (see `manifest.json`).
-2. **Everything else in `custom_components/sungrow/`** -- the HA integration proper: config flow, coordinator, and one file per HA platform (`sensor.py`, `number.py`, `select.py`, `switch.py`, `binary_sensor.py`, `button.py`).
+1. **`sungrow_modbus/`** -- a vendored, transport-independent device library (mirrors the PyPI package [`sungrow-modbus`](https://pypi.org/project/sungrow-modbus/)). It knows nothing about Home Assistant or how its `ModbusUnit` was obtained. It models the inverter as a `SungrowSHx` object composed of `Component` subsystems (from the `modbus_connection.model` framework), each owning a Modbus register block. It is vendored so the integration isn't blocked on a matching PyPI release; the underlying `modbus-connection` framework is a real PyPI dependency (see `manifest.json`).
+2. **Everything else in `custom_components/sungrow/`** -- the HA integration proper: config flow, coordinator, `modbus.py` (builds connection *params* only -- see Runtime flow), and one file per HA platform (`sensor.py`, `number.py`, `select.py`, `switch.py`, `binary_sensor.py`, `button.py`).
 
 ### Metadata-driven entity generation (the key mechanism)
 
@@ -41,7 +41,9 @@ Entities are **not** hand-listed per platform. Every register field declared in 
 
 ### Runtime flow
 
-- `__init__.py::async_setup_entry` builds a `ModbusConnection` (`modbus.py::build_connection`, TCP or serial from config entry data), connects, wraps a `ModbusUnit` in a `SungrowSHx` device object, and creates a `SungrowDataUpdateCoordinator`.
+- `modbus.py::build_params` turns config entry data into a `ModbusTcpParams`/`ModbusSerialParams` describing the endpoint only -- no connection is opened here.
+- `__init__.py::async_setup_entry` calls `homeassistant.components.modbus.async_get_unit(hass, entry, params, unit_id)` to get a `ModbusUnit` on HA core's shared connection for that endpoint (pooled with any other integration/entry on the same inverter or gateway), wraps it in a `SungrowSHx` device object, and creates a `SungrowDataUpdateCoordinator`. `entry.runtime_data` *is* the coordinator (no wrapper dataclass) -- every platform's `async_setup_entry` reads it directly. `async_get_unit` performs no I/O and doesn't raise on an unreachable device; that surfaces later, from `coordinator.async_config_entry_first_refresh()` converting the first failed poll into `ConfigEntryNotReady` on its own. HA core owns the connection's lifecycle (closed via `entry.async_on_unload`, registered inside `async_get_unit` itself), so `async_unload_entry` has nothing of its own to close.
+- `config_flow.py::_async_title` uses `async_get_temporary_unit` (an async context manager, for use before a config entry exists) to read the device model for the entry title without holding a connection open past the config flow.
 - `coordinator.py` is a standard `DataUpdateCoordinator[SungrowSHx]` polling every `SCAN_INTERVAL` (15s, `const.py`). Its `_async_update_data` calls `device.async_update()`.
 - `SungrowSHx.async_update()` (`sungrow_modbus/sungrow.py`) delegates to a single `ComponentGroup.async_update()`, which pools reads per Modbus register space (input vs. holding) across all subsystems -- so the number of entities never changes the number of round trips.
 - Every entity subclasses `SungrowEntity` (`entity.py`), which resolves its subsystem via `getattr(coordinator.device, component)` and shares one `DeviceInfo` (one HA device per inverter).

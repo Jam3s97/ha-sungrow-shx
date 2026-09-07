@@ -5,8 +5,10 @@ from __future__ import annotations
 from typing import Any
 
 import voluptuous as vol
+from homeassistant.components.modbus import async_get_temporary_unit
 from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
 from homeassistant.const import CONF_HOST, CONF_PORT
+from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.selector import (
     NumberSelector,
     NumberSelectorConfig,
@@ -33,7 +35,7 @@ from .const import (
     MODBUS_TYPE_SERIAL,
     MODBUS_TYPE_TCP,
 )
-from .modbus import build_connection
+from .modbus import build_params
 from .sungrow_modbus import SungrowSHx
 
 STEP_TYPE = vol.Schema(
@@ -126,17 +128,14 @@ class SungrowConfigFlow(ConfigFlow, domain=DOMAIN):
         return self.async_show_form(step_id=step_id, data_schema=schema, errors=errors)
 
     async def _async_title(self, data: dict[str, Any]) -> str | None:
-        """Connect, read the inverter model for the entry title, then disconnect."""
-        connection = build_connection(data)
+        """Read the inverter model over a temporary Modbus unit, for the entry title."""
+        params = build_params(data)
         try:
-            await connection.connect()
-        except ModbusError, OSError, ValueError:
+            async with async_get_temporary_unit(
+                self.hass, params, int(data[CONF_UNIT_ID])
+            ) as unit:
+                device = SungrowSHx(unit)
+                await device.info.async_update()
+        except ModbusError, OSError, ValueError, HomeAssistantError:
             return None
-        try:
-            device = SungrowSHx(connection.for_unit(int(data[CONF_UNIT_ID])))
-            await device.info.async_update()
-        except ModbusError, OSError, ValueError:
-            return None
-        finally:
-            await connection.close()
         return device.info.model

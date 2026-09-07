@@ -79,7 +79,7 @@ async def async_setup_entry(
     async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
     """Set up Sungrow sensors: every read-only field in the library."""
-    coordinator = entry.runtime_data.coordinator
+    coordinator = entry.runtime_data
     descriptions = [
         _description_for(field)
         for field in iter_fields(coordinator.device)

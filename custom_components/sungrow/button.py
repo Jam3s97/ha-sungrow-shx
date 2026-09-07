@@ -65,7 +65,7 @@ async def async_setup_entry(
     async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
     """Set up Sungrow buttons."""
-    coordinator = entry.runtime_data.coordinator
+    coordinator = entry.runtime_data
     async_add_entities(SungrowButton(coordinator, d) for d in _DESCRIPTIONS)
 
 

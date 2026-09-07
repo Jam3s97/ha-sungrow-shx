@@ -1,11 +1,11 @@
 """
-Build a ``modbus_connection`` connection from a config entry.
+Build the Modbus connection parameters for a config entry.
 
-Unlike the Home Assistant core integration (which borrows a unit from a
-shared ``modbus_connection`` config entry), this HACS package owns its
-Modbus link outright: it depends only on the ``modbus-connection`` PyPI
-package, so it works on any Home Assistant install without waiting on a
-core component.
+The connection itself comes from Home Assistant core's Modbus integration
+(``homeassistant.components.modbus``), which shares one connection per
+physical endpoint across every integration that asks it for a unit -- see
+:mod:`.__init__` and :mod:`.config_flow`. This module only describes which
+endpoint and link settings to ask for.
 """
 
 from __future__ import annotations
@@ -13,8 +13,7 @@ from __future__ import annotations
 from typing import Any
 
 from homeassistant.const import CONF_HOST, CONF_PORT
-from modbus_connection import ModbusConnection, ModbusSerialParams, ModbusTcpParams
-from modbus_connection.pymodbus import PymodbusConnection
+from modbus_connection import ModbusSerialParams, ModbusTcpParams
 
 from .const import (
     CONF_MODBUS_TYPE,
@@ -26,18 +25,14 @@ from .const import (
 )
 
 
-def build_connection(data: dict[str, Any]) -> ModbusConnection:
-    """Build a (not-yet-connected) ``ModbusConnection`` from config entry data."""
+def build_params(data: dict[str, Any]) -> ModbusTcpParams | ModbusSerialParams:
+    """Build the connection parameters describing the endpoint to reach."""
     if data[CONF_MODBUS_TYPE] == MODBUS_TYPE_SERIAL:
-        params = ModbusSerialParams(
+        return ModbusSerialParams(
             device=data[CONF_HOST],
             baudrate=data[CONF_SERIAL_BAUDRATE],
             parity=data[CONF_SERIAL_PARITY],
             stopbits=data[CONF_SERIAL_STOPBITS],
             bytesize=data[CONF_SERIAL_BYTESIZE],
         )
-    else:
-        params = ModbusTcpParams(
-            host=data[CONF_HOST], port=data[CONF_PORT], framer="socket"
-        )
-    return PymodbusConnection(params)
+    return ModbusTcpParams(host=data[CONF_HOST], port=data[CONF_PORT], framer="socket")

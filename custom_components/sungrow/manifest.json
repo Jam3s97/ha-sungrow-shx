@@ -3,10 +3,11 @@
   "name": "Sungrow",
   "codeowners": ["@Jam3s97"],
   "config_flow": true,
+  "dependencies": ["modbus"],
   "documentation": "https://github.com/Jam3s97/ha-sungrow-shx",
   "integration_type": "device",
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/Jam3s97/ha-sungrow-shx/issues",
-  "requirements": ["modbus-connection[pymodbus]>=4.8.1,<5"],
+  "requirements": ["modbus-connection>=4.8.1,<5"],
   "version": "0.1.0"
 }
