@@ -59,12 +59,17 @@ def state_class_for(field: FieldRef) -> SensorStateClass | None:
     """Return the appropriate state class, if any, for a numeric field."""
     unit = field.metadata.number.unit if field.metadata.number else None
     if unit == "kWh":
+        # "daily_*" fields reset to ~0 every day -- total_increasing is the
+        # state class HA's statistics engine expects for a periodic reset.
+        # "total_*" (lifetime) fields only reset rarely (firmware update,
+        # meter swap), never on a schedule -- plain total is the safer
+        # choice there. Matches the legacy YAML package's convention.
         return (
             SensorStateClass.TOTAL_INCREASING
-            if field.attribute.startswith("total_")
+            if field.attribute.startswith("daily_")
             else SensorStateClass.TOTAL
         )
-    if unit in (None, "kWh"):
+    if unit is None:
         return None
     return SensorStateClass.MEASUREMENT
 
