@@ -5,7 +5,8 @@
 # this integration vendors rather than depends on via PyPI -- see README.md.
 #
 # Usage: scripts/sync-vendor [ref]
-#   ref  Branch, tag, or commit to sync from (default: main).
+#   ref  Branch, tag, or commit to sync from (default: develop -- upstream
+#        lands fixes there before merging to main).
 #
 # Copies src/sungrow_modbus/ from the upstream repo over
 # custom_components/sungrow/sungrow_modbus/, deleting any local files that
@@ -18,7 +19,7 @@ set -e
 
 cd "$(dirname "$0")/.."
 
-REF="${1:-main}"
+REF="${1:-develop}"
 UPSTREAM="https://github.com/Jam3s97/sungrow-modbus.git"
 VENDOR_DIR="custom_components/sungrow/sungrow_modbus"
 CLONE_DIR="$(mktemp -d)"

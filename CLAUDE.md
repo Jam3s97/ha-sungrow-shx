@@ -15,7 +15,7 @@ scripts/setup       # install requirements_common.txt + requirements_test.txt (d
 scripts/develop     # run a local HA instance against ./config with the integration loaded (PYTHONPATH trick, no symlinks)
 scripts/lint        # ruff format . && ruff check . --fix
 scripts/test        # pytest (accepts pytest args, e.g. scripts/test -k config_flow)
-scripts/sync-vendor # pull custom_components/sungrow/sungrow_modbus/ from github.com/Jam3s97/sungrow-modbus (default ref: main)
+scripts/sync-vendor # pull custom_components/sungrow/sungrow_modbus/ from github.com/Jam3s97/sungrow-modbus (default ref: develop)
 ```
 
 CI (`.github/workflows/`) runs `ruff check` / `ruff format --check` (lint.yml), the `tests/` suite (test.yml), and `hassfest` + `hacs` structural validation (validate.yml) on every push/PR to `main`.
@@ -32,7 +32,7 @@ Ruff config (`.ruff.toml`) selects `ALL` rules, targets py314, and excludes `cus
 
 `custom_components/sungrow/` has two distinct layers that must not be conflated:
 
-1. **`sungrow_modbus/`** -- a vendored, transport-independent device library, synced from [`github.com/Jam3s97/sungrow-modbus`](https://github.com/Jam3s97/sungrow-modbus) via `scripts/sync-vendor` (and eventually meant to mirror the PyPI package [`sungrow-modbus`](https://pypi.org/project/sungrow-modbus/), not yet published). It knows nothing about Home Assistant or how its `ModbusUnit` was obtained. It models the inverter as a `SungrowSHx` object composed of `Component` subsystems (from the `modbus_connection.model` framework), each owning a Modbus register block. It is vendored so the integration isn't blocked on a matching PyPI release; the underlying `modbus-connection` framework is a real PyPI dependency (see `manifest.json`). Syncing is a manual, on-demand step (run `scripts/sync-vendor [ref]`, default `main`, then review the diff) -- there's no CI job auto-pulling upstream changes.
+1. **`sungrow_modbus/`** -- a vendored, transport-independent device library, synced from [`github.com/Jam3s97/sungrow-modbus`](https://github.com/Jam3s97/sungrow-modbus) via `scripts/sync-vendor` (and eventually meant to mirror the PyPI package [`sungrow-modbus`](https://pypi.org/project/sungrow-modbus/), not yet published). It knows nothing about Home Assistant or how its `ModbusUnit` was obtained. It models the inverter as a `SungrowSHx` object composed of `Component` subsystems (from the `modbus_connection.model` framework), each owning a Modbus register block. It is vendored so the integration isn't blocked on a matching PyPI release; the underlying `modbus-connection` framework is a real PyPI dependency (see `manifest.json`). Syncing is a manual, on-demand step (run `scripts/sync-vendor [ref]`, default `develop` since upstream lands fixes there before merging to `main`, then review the diff) -- there's no CI job auto-pulling upstream changes.
 2. **Everything else in `custom_components/sungrow/`** -- the HA integration proper: config flow, coordinator, `modbus.py` (builds connection *params* only -- see Runtime flow), and one file per HA platform (`sensor.py`, `number.py`, `select.py`, `switch.py`, `binary_sensor.py`, `button.py`).
 
 ### Metadata-driven entity generation (the key mechanism)
