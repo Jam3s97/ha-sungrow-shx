@@ -74,12 +74,12 @@ def _description_for(field: FieldRef) -> SungrowSensorDescription:
 
 
 async def async_setup_entry(
-    hass: HomeAssistant,
+    _hass: HomeAssistant,
     entry: SungrowConfigEntry,
     async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
-    """Set up Sungrow SHx sensors: every read-only field in the library."""
-    coordinator = entry.runtime_data
+    """Set up Sungrow sensors: every read-only field in the library."""
+    coordinator = entry.runtime_data.coordinator
     descriptions = [
         _description_for(field)
         for field in iter_fields(coordinator.device)

@@ -1,4 +1,4 @@
-# Sungrow SHx for Home Assistant
+# Sungrow for Home Assistant
 
 [![hacs][hacs-badge]][hacs-url]
 [![Validate][validate-badge]][validate-url]
@@ -6,7 +6,7 @@
 
 A [HACS](https://hacs.xyz/) custom integration for **Sungrow SHx** hybrid inverters (SH3.0RS through SH25T, with an SBR-series or compatible battery), talking directly to the inverter over Modbus TCP or a serial/RS485 gateway. No cloud account, no iSolarCloud dependency.
 
-This repository packages [`sungrow-modbus`](https://pypi.org/project/sungrow-modbus/) -- a standalone, transport-independent Modbus device library -- into a ready-to-install Home Assistant custom component. The library is vendored under `custom_components/sungrow_shx/sungrow_modbus/` so the integration has no dependency on a matching PyPI release landing first; only the underlying `modbus-connection` transport library is installed from PyPI.
+This repository packages [`sungrow-modbus`](https://pypi.org/project/sungrow-modbus/) -- a standalone, transport-independent Modbus device library -- into a ready-to-install Home Assistant custom component. The library is vendored under `custom_components/sungrow/sungrow_modbus/` so the integration has no dependency on a matching PyPI release landing first; only the underlying `modbus-connection` transport library is installed from PyPI.
 
 This package is standalone by design: it manages its own Modbus connection directly rather than depending on Home Assistant core's shared-connection mechanism, so it installs and works today without waiting on anything else to land upstream.
 
@@ -25,13 +25,13 @@ This package is standalone by design: it manages its own Modbus connection direc
 ### HACS (recommended)
 
 1. In HACS, go to *Integrations* → the three-dot menu → *Custom repositories*, and add this repository's URL with category *Integration* (only needed until this integration is available in the default HACS catalog).
-2. Search for "Sungrow SHx" in HACS and install it.
+2. Search for "Sungrow" in HACS and install it.
 3. Restart Home Assistant.
-4. Go to *Settings → Devices & Services → Add Integration*, search for "Sungrow SHx", and follow the prompts.
+4. Go to *Settings → Devices & Services → Add Integration*, search for "Sungrow", and follow the prompts.
 
 ### Manual
 
-Copy `custom_components/sungrow_shx` into your Home Assistant `custom_components` directory, restart Home Assistant, then add the integration as above.
+Copy `custom_components/sungrow` into your Home Assistant `custom_components` directory, restart Home Assistant, then add the integration as above.
 
 ## Configuration
 

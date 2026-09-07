@@ -1,7 +1,7 @@
 """
-Base entity for the Sungrow SHx custom integration.
+Base entity for the Sungrow custom integration.
 
-An SHx inverter is a single physical device: every entity belongs to the
+A Sungrow inverter is a single physical device: every entity belongs to the
 same device, distinguished only by which library sub-system (``pv``,
 ``battery``, ``grid``, ...) it reads from.
 """
@@ -16,7 +16,7 @@ from .coordinator import SungrowDataUpdateCoordinator
 
 
 class SungrowEntity(CoordinatorEntity[SungrowDataUpdateCoordinator]):
-    """Common identity + device-info for every Sungrow SHx entity."""
+    """Common identity + device-info for every Sungrow entity."""
 
     _attr_has_entity_name = True
 

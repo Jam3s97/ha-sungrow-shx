@@ -5,7 +5,7 @@ target-version = "py314"
 # The vendored device library under sungrow_modbus/ ships its own lint
 # configuration upstream (see the sungrow-modbus package) and is not
 # reformatted to this project's stricter house style; see README.md.
-extend-exclude = ["custom_components/sungrow_shx/sungrow_modbus"]
+extend-exclude = ["custom_components/sungrow/sungrow_modbus"]
 
 [lint]
 select = [

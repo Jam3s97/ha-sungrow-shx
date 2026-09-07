@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
+import logging
 from typing import TYPE_CHECKING
 
+from modbus_connection import IllegalDataAddressError, IllegalFunctionError
 from modbus_connection.model import Component, ComponentGroup
 
 from .data_model import async_start_inverter, async_stop_inverter
@@ -20,7 +22,14 @@ from .subsystems import (
 )
 
 if TYPE_CHECKING:
-    from modbus_connection import ModbusUnit
+    from modbus_connection import ModbusUnit, ReadBlock
+
+_LOGGER = logging.getLogger(__name__)
+
+# Codes meaning "this device fundamentally does not serve this block" (as
+# opposed to e.g. ServerDeviceBusyError, which is transient and must not be
+# treated as a permanently missing register).
+_UNSUPPORTED_BLOCK_ERRORS = (IllegalDataAddressError, IllegalFunctionError)
 
 
 class SungrowSHx:
@@ -65,8 +74,53 @@ class SungrowSHx:
         )
 
     async def async_update(self) -> None:
-        """Refresh every subsystem, pooling reads per register space."""
-        await self._group.async_update()
+        """Refresh every subsystem, pooling reads per register space.
+
+        Not every SHx variant (or meter wired to one) answers every register
+        this library declares -- e.g. a single-phase meter has no per-phase
+        B/C block. Rather than let one such block fail every subsystem's
+        update forever, the first time a component's block comes back
+        unsupported its fields are permanently dropped (they then read as
+        ``None``) and the read is retried without them.
+        """
+        while True:
+            try:
+                await self._group.async_update()
+            except _UNSUPPORTED_BLOCK_ERRORS as err:
+                if err.block is None or not self._drop_fields_in(err.block):
+                    raise
+            else:
+                return
+
+    def _drop_fields_in(self, block: ReadBlock) -> bool:
+        """Drop whichever component's fields overlap ``block``.
+
+        Returns whether a component was narrowed, so the caller knows
+        retrying the read can make progress.
+        """
+        block_end = block.address + block.count
+        for component in self.components:
+            resolved = component.resolved_fields
+            hit = {
+                name
+                for name, field in resolved.items()
+                if field.space == block.space
+                and field.address < block_end
+                and field.address + field.count > block.address
+            }
+            if not hit:
+                continue
+            _LOGGER.warning(
+                "%s does not answer %s registers %d-%d; %s will read as " "unavailable",
+                type(component).__name__,
+                block.space,
+                block.address,
+                block_end - 1,
+                ", ".join(sorted(hit)),
+            )
+            component.restrict_fields(set(resolved) - hit)
+            return True
+        return False
 
     async def async_start(self) -> None:
         """Send the inverter start command."""

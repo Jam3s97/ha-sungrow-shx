@@ -1,4 +1,4 @@
-"""Config flow for the Sungrow SHx custom integration."""
+"""Config flow for the Sungrow custom integration."""
 
 from __future__ import annotations
 
@@ -75,7 +75,7 @@ STEP_SERIAL = vol.Schema(
 
 
 class SungrowConfigFlow(ConfigFlow, domain=DOMAIN):
-    """Handle a config flow for the Sungrow SHx custom integration."""
+    """Handle a config flow for the Sungrow custom integration."""
 
     VERSION = 1
 
@@ -130,12 +130,12 @@ class SungrowConfigFlow(ConfigFlow, domain=DOMAIN):
         connection = build_connection(data)
         try:
             await connection.connect()
-        except (ModbusError, OSError, ValueError):
+        except ModbusError, OSError, ValueError:
             return None
         try:
             device = SungrowSHx(connection.for_unit(int(data[CONF_UNIT_ID])))
             await device.info.async_update()
-        except (ModbusError, OSError, ValueError):
+        except ModbusError, OSError, ValueError:
             return None
         finally:
             await connection.close()

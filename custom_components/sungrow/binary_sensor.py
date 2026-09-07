@@ -64,12 +64,12 @@ _DESCRIPTIONS: tuple[SungrowBinarySensorDescription, ...] = (
 
 
 async def async_setup_entry(
-    hass: HomeAssistant,
+    _hass: HomeAssistant,
     entry: SungrowConfigEntry,
     async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
-    """Set up Sungrow SHx binary sensors."""
-    coordinator = entry.runtime_data
+    """Set up Sungrow binary sensors."""
+    coordinator = entry.runtime_data.coordinator
     async_add_entities(SungrowBinarySensor(coordinator, d) for d in _DESCRIPTIONS)
 
 

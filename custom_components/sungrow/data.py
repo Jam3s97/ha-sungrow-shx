@@ -1,4 +1,4 @@
-"""Custom types for the Sungrow SHx custom integration."""
+"""Custom types for the Sungrow custom integration."""
 
 from __future__ import annotations
 
@@ -17,7 +17,7 @@ type SungrowConfigEntry = ConfigEntry[SungrowData]
 
 @dataclass
 class SungrowData:
-    """Runtime data for the Sungrow SHx custom integration."""
+    """Runtime data for the Sungrow custom integration."""
 
     connection: ModbusConnection
     coordinator: SungrowDataUpdateCoordinator

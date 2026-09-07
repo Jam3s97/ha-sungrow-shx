@@ -40,12 +40,12 @@ def _description_for(field: FieldRef) -> SungrowSwitchDescription:
 
 
 async def async_setup_entry(
-    hass: HomeAssistant,
+    _hass: HomeAssistant,
     entry: SungrowConfigEntry,
     async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
-    """Set up Sungrow SHx switches: every writable boolean field."""
-    coordinator = entry.runtime_data
+    """Set up Sungrow switches: every writable boolean field."""
+    coordinator = entry.runtime_data.coordinator
     descriptions = [
         _description_for(field)
         for field in iter_fields(coordinator.device)
@@ -76,12 +76,12 @@ class SungrowSwitch(SungrowEntity, SwitchEntity):
             return None
         return value is OnOffCode.ON
 
-    async def async_turn_on(self, **kwargs: object) -> None:
+    async def async_turn_on(self, **_kwargs: object) -> None:
         """Enable the setting."""
         await self._subsystem.write(self.entity_description.attribute, OnOffCode.ON)
         await self.coordinator.async_request_refresh()
 
-    async def async_turn_off(self, **kwargs: object) -> None:
+    async def async_turn_off(self, **_kwargs: object) -> None:
         """Disable the setting."""
         await self._subsystem.write(self.entity_description.attribute, OnOffCode.OFF)
         await self.coordinator.async_request_refresh()

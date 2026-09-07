@@ -1,4 +1,4 @@
-"""Constants for the Sungrow SHx custom integration."""
+"""Constants for the Sungrow custom integration."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ from typing import Final
 
 LOGGER: Logger = getLogger(__package__)
 
-DOMAIN: Final = "sungrow_shx"
+DOMAIN: Final = "sungrow"
 
 CONF_MODBUS_TYPE: Final = "modbus_type"
 CONF_UNIT_ID: Final = "unit_id"

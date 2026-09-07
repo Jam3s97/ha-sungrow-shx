@@ -43,12 +43,12 @@ def _description_for(field: FieldRef) -> SungrowSelectDescription:
 
 
 async def async_setup_entry(
-    hass: HomeAssistant,
+    _hass: HomeAssistant,
     entry: SungrowConfigEntry,
     async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
-    """Set up Sungrow SHx selects: every writable enum field."""
-    coordinator = entry.runtime_data
+    """Set up Sungrow selects: every writable enum field."""
+    coordinator = entry.runtime_data.coordinator
     descriptions = [
         _description_for(field)
         for field in iter_fields(coordinator.device)

@@ -9,4 +9,4 @@ homeassistant:
 logger:
   default: info
   logs:
-    custom_components.sungrow_shx: debug
+    custom_components.sungrow: debug

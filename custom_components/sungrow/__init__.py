@@ -36,7 +36,7 @@ PLATFORMS: list[Platform] = [
 
 async def async_setup_entry(hass: HomeAssistant, entry: SungrowConfigEntry) -> bool:
     """
-    Set up Sungrow SHx from a config entry.
+    Set up Sungrow from a config entry.
 
     This integration owns its Modbus connection outright (see
     :mod:`.modbus`): it does not depend on any shared core component, so it
@@ -46,7 +46,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: SungrowConfigEntry) -> b
     try:
         await connection.connect()
     except (ModbusError, OSError) as err:
-        raise ConfigEntryNotReady(f"Could not connect to the inverter: {err}") from err
+        msg = f"Could not connect to the inverter: {err}"
+        raise ConfigEntryNotReady(msg) from err
 
     device = SungrowSHx(connection.for_unit(int(entry.data[CONF_UNIT_ID])))
     coordinator = SungrowDataUpdateCoordinator(hass, entry, device)

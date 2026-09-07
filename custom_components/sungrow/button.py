@@ -60,12 +60,12 @@ _DESCRIPTIONS: tuple[SungrowButtonDescription, ...] = (
 
 
 async def async_setup_entry(
-    hass: HomeAssistant,
+    _hass: HomeAssistant,
     entry: SungrowConfigEntry,
     async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
-    """Set up Sungrow SHx buttons."""
-    coordinator = entry.runtime_data
+    """Set up Sungrow buttons."""
+    coordinator = entry.runtime_data.coordinator
     async_add_entities(SungrowButton(coordinator, d) for d in _DESCRIPTIONS)
 
 
