@@ -16,3 +16,8 @@ coverage.xml
 # Home Assistant configuration
 config/*
 !config/configuration.yaml
+!config/legacy_migration_package.yaml
+
+# Local build input for scripts/generate_legacy_entity_map.py -- see
+# dev/legacy_reference/README.md for where to get it.
+dev/legacy_reference/modbus_sungrow.yaml

@@ -4,6 +4,12 @@ default_config:
 # https://www.home-assistant.io/integrations/homeassistant/
 homeassistant:
   debug: true
+  packages:
+    # Legacy YAML "modbus_sungrow.yaml" package, for building/testing a
+    # migration path against the `sungrow` config-entry integration. See
+    # config/legacy_migration_package.yaml for the connection-contention
+    # caveat before enabling both against real hardware.
+    legacy_sungrow: !include legacy_migration_package.yaml
 
 # https://www.home-assistant.io/integrations/logger/
 logger:

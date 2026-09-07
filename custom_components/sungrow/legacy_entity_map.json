@@ -1,0 +1,976 @@
+{
+  "backup_phase_a_power": [
+    {
+      "device_class": "power",
+      "domain": "sensor",
+      "entity_id": "sensor.backup_phase_a_power",
+      "state_class": "measurement",
+      "unique_id": "sg_backup_phase_a_power",
+      "unit_of_measurement": "W"
+    }
+  ],
+  "backup_phase_b_power": [
+    {
+      "device_class": "power",
+      "domain": "sensor",
+      "entity_id": "sensor.backup_phase_b_power",
+      "state_class": "measurement",
+      "unique_id": "sg_backup_phase_b_power",
+      "unit_of_measurement": "W"
+    }
+  ],
+  "backup_phase_c_power": [
+    {
+      "device_class": "power",
+      "domain": "sensor",
+      "entity_id": "sensor.backup_phase_c_power",
+      "state_class": "measurement",
+      "unique_id": "sg_backup_phase_c_power",
+      "unit_of_measurement": "W"
+    }
+  ],
+  "backup_total_power": [
+    {
+      "device_class": "power",
+      "domain": "sensor",
+      "entity_id": "sensor.total_backup_power",
+      "state_class": "measurement",
+      "unique_id": "sg_total_backup_power",
+      "unit_of_measurement": "W"
+    }
+  ],
+  "battery_bdc_rated_power": [
+    {
+      "device_class": "power",
+      "domain": "sensor",
+      "entity_id": "sensor.bdc_rated_power",
+      "state_class": "measurement",
+      "unique_id": "sg_bdc_rated_power",
+      "unit_of_measurement": "W"
+    }
+  ],
+  "battery_bms_max_charging_current": [
+    {
+      "device_class": "current",
+      "domain": "sensor",
+      "entity_id": "sensor.bms_max_charging_current",
+      "state_class": "measurement",
+      "unique_id": "sg_bms_max_charging_current",
+      "unit_of_measurement": "A"
+    }
+  ],
+  "battery_bms_max_discharging_current": [
+    {
+      "device_class": "current",
+      "domain": "sensor",
+      "entity_id": "sensor.bms_max_discharging_current",
+      "state_class": "measurement",
+      "unique_id": "sg_bms_max_discharging_current",
+      "unit_of_measurement": "A"
+    }
+  ],
+  "battery_capacity_high_precision": [
+    {
+      "device_class": "energy_storage",
+      "domain": "sensor",
+      "entity_id": "sensor.battery_capacity_high_precision",
+      "state_class": null,
+      "unique_id": "uid_battery_capacity_high_precision",
+      "unit_of_measurement": "kWh"
+    }
+  ],
+  "battery_current": [
+    {
+      "device_class": "current",
+      "domain": "sensor",
+      "entity_id": "sensor.battery_current",
+      "state_class": "measurement",
+      "unique_id": "sg_battery_current",
+      "unit_of_measurement": "A"
+    }
+  ],
+  "battery_level": [
+    {
+      "device_class": "battery",
+      "domain": "sensor",
+      "entity_id": "sensor.battery_level",
+      "state_class": "measurement",
+      "unique_id": "sg_battery_level",
+      "unit_of_measurement": "%"
+    }
+  ],
+  "battery_power": [
+    {
+      "device_class": "power",
+      "domain": "sensor",
+      "entity_id": "sensor.battery_power",
+      "state_class": "measurement",
+      "unique_id": "sg_battery_power",
+      "unit_of_measurement": "W"
+    }
+  ],
+  "battery_settings_charging_start_power": [
+    {
+      "device_class": "power",
+      "domain": "sensor",
+      "entity_id": "sensor.battery_charging_start_power",
+      "state_class": "measurement",
+      "unique_id": "sg_battery_charging_start_power",
+      "unit_of_measurement": "W"
+    }
+  ],
+  "battery_settings_discharging_start_power": [
+    {
+      "device_class": "power",
+      "domain": "sensor",
+      "entity_id": "sensor.battery_discharging_start_power",
+      "state_class": "measurement",
+      "unique_id": "sg_battery_discharging_start_power",
+      "unit_of_measurement": "W"
+    }
+  ],
+  "battery_settings_forced_charge_discharge_command": [
+    {
+      "device_class": null,
+      "domain": "sensor",
+      "entity_id": "sensor.battery_forced_charge_discharge_cmd_raw",
+      "state_class": "measurement",
+      "unique_id": "sg_battery_forced_charge_discharge_cmd_raw",
+      "unit_of_measurement": null
+    }
+  ],
+  "battery_settings_forced_charge_discharge_power": [
+    {
+      "device_class": "power",
+      "domain": "sensor",
+      "entity_id": "sensor.battery_forced_charge_discharge_power",
+      "state_class": "measurement",
+      "unique_id": "sg_battery_forced_charge_discharge_power",
+      "unit_of_measurement": "W"
+    }
+  ],
+  "battery_settings_max_charge_power": [
+    {
+      "device_class": "power",
+      "domain": "sensor",
+      "entity_id": "sensor.battery_max_charge_power",
+      "state_class": "measurement",
+      "unique_id": "sg_battery_max_charge_power",
+      "unit_of_measurement": "W"
+    }
+  ],
+  "battery_settings_max_discharge_power": [
+    {
+      "device_class": "power",
+      "domain": "sensor",
+      "entity_id": "sensor.battery_max_discharge_power",
+      "state_class": "measurement",
+      "unique_id": "sg_battery_max_discharge_power",
+      "unit_of_measurement": "W"
+    }
+  ],
+  "battery_settings_max_soc": [
+    {
+      "device_class": "battery",
+      "domain": "sensor",
+      "entity_id": "sensor.battery_max_soc",
+      "state_class": "measurement",
+      "unique_id": "uid_sg_battery_max_soc",
+      "unit_of_measurement": "%"
+    }
+  ],
+  "battery_settings_min_soc": [
+    {
+      "device_class": "battery",
+      "domain": "sensor",
+      "entity_id": "sensor.battery_min_soc",
+      "state_class": "measurement",
+      "unique_id": "uid_sg_battery_min_soc",
+      "unit_of_measurement": "%"
+    }
+  ],
+  "battery_settings_reserved_soc_for_backup": [
+    {
+      "device_class": "battery",
+      "domain": "sensor",
+      "entity_id": "sensor.battery_reserved_soc_for_backup",
+      "state_class": "measurement",
+      "unique_id": "sg_battery_reserved_soc_for_backup",
+      "unit_of_measurement": "%"
+    }
+  ],
+  "battery_state_of_health": [
+    {
+      "device_class": null,
+      "domain": "sensor",
+      "entity_id": "sensor.battery_state_of_health",
+      "state_class": "measurement",
+      "unique_id": "sg_battery_state_of_health",
+      "unit_of_measurement": "%"
+    }
+  ],
+  "battery_temperature": [
+    {
+      "device_class": "temperature",
+      "domain": "sensor",
+      "entity_id": "sensor.battery_temperature",
+      "state_class": "measurement",
+      "unique_id": "sg_battery_temperature",
+      "unit_of_measurement": "\u00b0C"
+    }
+  ],
+  "battery_voltage": [
+    {
+      "device_class": "voltage",
+      "domain": "sensor",
+      "entity_id": "sensor.battery_voltage",
+      "state_class": "measurement",
+      "unique_id": "sg_battery_voltage",
+      "unit_of_measurement": "V"
+    }
+  ],
+  "controls_active_power_limitation_enabled": [
+    {
+      "device_class": null,
+      "domain": "sensor",
+      "entity_id": "sensor.active_power_limitation_raw",
+      "state_class": "measurement",
+      "unique_id": "sg_active_power_limitation_raw",
+      "unit_of_measurement": null
+    }
+  ],
+  "controls_active_power_limitation_ratio": [
+    {
+      "device_class": null,
+      "domain": "sensor",
+      "entity_id": "sensor.active_power_limitation_ratio_raw",
+      "state_class": "measurement",
+      "unique_id": "sg_active_power_limitation_ratio_raw",
+      "unit_of_measurement": "%"
+    }
+  ],
+  "controls_apl_shutdown_on_zero_export": [
+    {
+      "device_class": null,
+      "domain": "sensor",
+      "entity_id": "sensor.apl_shutdown_at_zero_raw",
+      "state_class": "measurement",
+      "unique_id": "sg_apl_shutdown_on_zero_raw",
+      "unit_of_measurement": null
+    }
+  ],
+  "controls_backup_mode_enabled": [
+    {
+      "device_class": null,
+      "domain": "sensor",
+      "entity_id": "sensor.backup_mode_raw",
+      "state_class": "measurement",
+      "unique_id": "sg_backup_mode_raw",
+      "unit_of_measurement": null
+    },
+    {
+      "device_class": null,
+      "domain": "switch",
+      "entity_id": "switch.backup_mode",
+      "state_class": null,
+      "unique_id": "sg_backup_mode_switch",
+      "unit_of_measurement": null
+    }
+  ],
+  "controls_ems_mode": [
+    {
+      "device_class": null,
+      "domain": "sensor",
+      "entity_id": "sensor.ems_mode_selection_raw",
+      "state_class": "measurement",
+      "unique_id": "sg_ems_mode_selection_raw",
+      "unit_of_measurement": null
+    }
+  ],
+  "controls_export_power_limit": [
+    {
+      "device_class": "power",
+      "domain": "sensor",
+      "entity_id": "sensor.export_power_limit",
+      "state_class": "measurement",
+      "unique_id": "sg_export_power_limit",
+      "unit_of_measurement": "W"
+    }
+  ],
+  "controls_export_power_limit_enabled": [
+    {
+      "device_class": null,
+      "domain": "sensor",
+      "entity_id": "sensor.export_power_limit_mode_raw",
+      "state_class": "measurement",
+      "unique_id": "sg_export_power_limit_mode_raw",
+      "unit_of_measurement": null
+    },
+    {
+      "device_class": null,
+      "domain": "switch",
+      "entity_id": "switch.export_power_limit",
+      "state_class": null,
+      "unique_id": "sg_export_power_limit_switch",
+      "unit_of_measurement": null
+    }
+  ],
+  "controls_load_adjustment_mode": [
+    {
+      "device_class": null,
+      "domain": "sensor",
+      "entity_id": "sensor.load_adjustment_mode_selection_raw",
+      "state_class": "measurement",
+      "unique_id": "sg_load_adjustment_mode_selection_raw",
+      "unit_of_measurement": null
+    }
+  ],
+  "controls_load_adjustment_mode_enabled": [
+    {
+      "device_class": null,
+      "domain": "sensor",
+      "entity_id": "sensor.load_adjustment_mode_enable_raw",
+      "state_class": "measurement",
+      "unique_id": "sg_load_adjustment_mode_enable_raw",
+      "unit_of_measurement": null
+    },
+    {
+      "device_class": null,
+      "domain": "switch",
+      "entity_id": "switch.load_adjustment_mode",
+      "state_class": null,
+      "unique_id": "sg_load_adjustment_mode_switch",
+      "unit_of_measurement": null
+    }
+  ],
+  "energy_daily_battery_charge": [
+    {
+      "device_class": "energy",
+      "domain": "sensor",
+      "entity_id": "sensor.daily_battery_charge",
+      "state_class": "total_increasing",
+      "unique_id": "sg_daily_battery_charge",
+      "unit_of_measurement": "kWh"
+    }
+  ],
+  "energy_daily_battery_charge_from_pv": [
+    {
+      "device_class": "energy",
+      "domain": "sensor",
+      "entity_id": "sensor.daily_battery_charge_from_pv",
+      "state_class": "total_increasing",
+      "unique_id": "sg_daily_battery_charge_from_pv",
+      "unit_of_measurement": "kWh"
+    }
+  ],
+  "energy_daily_battery_discharge": [
+    {
+      "device_class": "energy",
+      "domain": "sensor",
+      "entity_id": "sensor.daily_battery_discharge",
+      "state_class": "total_increasing",
+      "unique_id": "sg_daily_battery_discharge",
+      "unit_of_measurement": "kWh"
+    }
+  ],
+  "energy_daily_direct_energy_consumption": [
+    {
+      "device_class": "energy",
+      "domain": "sensor",
+      "entity_id": "sensor.daily_direct_energy_consumption",
+      "state_class": "total_increasing",
+      "unique_id": "sg_daily_direct_energy_consumption",
+      "unit_of_measurement": "kWh"
+    }
+  ],
+  "energy_daily_exported_energy": [
+    {
+      "device_class": "energy",
+      "domain": "sensor",
+      "entity_id": "sensor.daily_exported_energy",
+      "state_class": "total_increasing",
+      "unique_id": "sg_daily_exported_energy",
+      "unit_of_measurement": "kWh"
+    }
+  ],
+  "energy_daily_exported_energy_from_pv": [
+    {
+      "device_class": "energy",
+      "domain": "sensor",
+      "entity_id": "sensor.daily_exported_energy_from_pv",
+      "state_class": "total_increasing",
+      "unique_id": "sg_daily_exported_energy_from_PV",
+      "unit_of_measurement": "kWh"
+    }
+  ],
+  "energy_daily_imported_energy": [
+    {
+      "device_class": "energy",
+      "domain": "sensor",
+      "entity_id": "sensor.daily_imported_energy",
+      "state_class": "total_increasing",
+      "unique_id": "sg_daily_imported_energy",
+      "unit_of_measurement": "kWh"
+    }
+  ],
+  "energy_daily_pv_generation": [
+    {
+      "device_class": "energy",
+      "domain": "sensor",
+      "entity_id": "sensor.daily_pv_generation",
+      "state_class": "total_increasing",
+      "unique_id": "sg_daily_pv_generation",
+      "unit_of_measurement": "kWh"
+    }
+  ],
+  "energy_daily_pv_generation_and_battery_discharge": [
+    {
+      "device_class": "energy",
+      "domain": "sensor",
+      "entity_id": "sensor.daily_pv_generation_battery_discharge",
+      "state_class": "total_increasing",
+      "unique_id": "sg_daily_pv_gen_battery_discharge",
+      "unit_of_measurement": "kWh"
+    }
+  ],
+  "energy_total_battery_charge": [
+    {
+      "device_class": "energy",
+      "domain": "sensor",
+      "entity_id": "sensor.total_battery_charge",
+      "state_class": "total",
+      "unique_id": "sg_total_battery_charge",
+      "unit_of_measurement": "kWh"
+    }
+  ],
+  "energy_total_battery_charge_from_pv": [
+    {
+      "device_class": "energy",
+      "domain": "sensor",
+      "entity_id": "sensor.total_battery_charge_from_pv",
+      "state_class": "total",
+      "unique_id": "sg_total_battery_charge_from_pv",
+      "unit_of_measurement": "kWh"
+    }
+  ],
+  "energy_total_battery_discharge": [
+    {
+      "device_class": "energy",
+      "domain": "sensor",
+      "entity_id": "sensor.total_battery_discharge",
+      "state_class": "total",
+      "unique_id": "sg_total_battery_discharge",
+      "unit_of_measurement": "kWh"
+    }
+  ],
+  "energy_total_direct_energy_consumption": [
+    {
+      "device_class": "energy",
+      "domain": "sensor",
+      "entity_id": "sensor.total_direct_energy_consumption",
+      "state_class": "total",
+      "unique_id": "sg_total_direct_energy_consumption",
+      "unit_of_measurement": "kWh"
+    }
+  ],
+  "energy_total_exported_energy": [
+    {
+      "device_class": "energy",
+      "domain": "sensor",
+      "entity_id": "sensor.total_exported_energy",
+      "state_class": "total",
+      "unique_id": "sg_total_exported_energy",
+      "unit_of_measurement": "kWh"
+    }
+  ],
+  "energy_total_exported_energy_from_pv": [
+    {
+      "device_class": "energy",
+      "domain": "sensor",
+      "entity_id": "sensor.total_exported_energy_from_pv",
+      "state_class": "total",
+      "unique_id": "sg_total_exported_energy_from_pv",
+      "unit_of_measurement": "kWh"
+    }
+  ],
+  "energy_total_imported_energy": [
+    {
+      "device_class": "energy",
+      "domain": "sensor",
+      "entity_id": "sensor.total_imported_energy",
+      "state_class": "total",
+      "unique_id": "sg_total_imported_energy",
+      "unit_of_measurement": "kWh"
+    }
+  ],
+  "energy_total_pv_generation": [
+    {
+      "device_class": "energy",
+      "domain": "sensor",
+      "entity_id": "sensor.total_pv_generation",
+      "state_class": "total",
+      "unique_id": "sg_total_pv_generation",
+      "unit_of_measurement": "kWh"
+    }
+  ],
+  "energy_total_pv_generation_and_battery_discharge": [
+    {
+      "device_class": "energy",
+      "domain": "sensor",
+      "entity_id": "sensor.total_pv_generation_battery_discharge",
+      "state_class": "total",
+      "unique_id": "sg_total_pv_gen_battery_discharge",
+      "unit_of_measurement": "kWh"
+    }
+  ],
+  "grid_export_power_limit_max": [
+    {
+      "device_class": "power",
+      "domain": "sensor",
+      "entity_id": "sensor.export_power_limit_max",
+      "state_class": "measurement",
+      "unique_id": "sg_export_power_limit_max",
+      "unit_of_measurement": "W"
+    }
+  ],
+  "grid_export_power_limit_min": [
+    {
+      "device_class": "power",
+      "domain": "sensor",
+      "entity_id": "sensor.export_power_limit_min",
+      "state_class": "measurement",
+      "unique_id": "sg_export_power_limit_min",
+      "unit_of_measurement": "W"
+    }
+  ],
+  "grid_export_power_raw": [
+    {
+      "device_class": "power",
+      "domain": "sensor",
+      "entity_id": "sensor.export_power_raw",
+      "state_class": "measurement",
+      "unique_id": "sg_battery_export_power_raw",
+      "unit_of_measurement": "W"
+    }
+  ],
+  "grid_frequency": [
+    {
+      "device_class": "frequency",
+      "domain": "sensor",
+      "entity_id": "sensor.grid_frequency",
+      "state_class": "measurement",
+      "unique_id": "sg_grid_frequency",
+      "unit_of_measurement": "Hz"
+    }
+  ],
+  "grid_load_power": [
+    {
+      "device_class": "power",
+      "domain": "sensor",
+      "entity_id": "sensor.load_power",
+      "state_class": "measurement",
+      "unique_id": "sg_load_power",
+      "unit_of_measurement": "W"
+    }
+  ],
+  "grid_meter_active_power": [
+    {
+      "device_class": "power",
+      "domain": "sensor",
+      "entity_id": "sensor.meter_active_power",
+      "state_class": "measurement",
+      "unique_id": "sg_meter_active_power",
+      "unit_of_measurement": "W"
+    }
+  ],
+  "grid_meter_phase_a_active_power": [
+    {
+      "device_class": "power",
+      "domain": "sensor",
+      "entity_id": "sensor.meter_phase_a_active_power",
+      "state_class": "measurement",
+      "unique_id": "sg_meter_phase_a_active_power",
+      "unit_of_measurement": "W"
+    }
+  ],
+  "grid_meter_phase_a_current": [
+    {
+      "device_class": "current",
+      "domain": "sensor",
+      "entity_id": "sensor.meter_phase_a_current",
+      "state_class": "measurement",
+      "unique_id": "sg_meter_phase_a_current",
+      "unit_of_measurement": "A"
+    }
+  ],
+  "grid_meter_phase_a_voltage": [
+    {
+      "device_class": "voltage",
+      "domain": "sensor",
+      "entity_id": "sensor.meter_phase_a_voltage",
+      "state_class": "measurement",
+      "unique_id": "sg_meter_phase_a_voltage",
+      "unit_of_measurement": "V"
+    }
+  ],
+  "grid_meter_phase_b_active_power": [
+    {
+      "device_class": "power",
+      "domain": "sensor",
+      "entity_id": "sensor.meter_phase_b_active_power",
+      "state_class": "measurement",
+      "unique_id": "sg_meter_phase_b_active_power",
+      "unit_of_measurement": "W"
+    }
+  ],
+  "grid_meter_phase_b_current": [
+    {
+      "device_class": "current",
+      "domain": "sensor",
+      "entity_id": "sensor.meter_phase_b_current",
+      "state_class": "measurement",
+      "unique_id": "sg_meter_phase_b_current",
+      "unit_of_measurement": "A"
+    }
+  ],
+  "grid_meter_phase_b_voltage": [
+    {
+      "device_class": "voltage",
+      "domain": "sensor",
+      "entity_id": "sensor.meter_phase_b_voltage",
+      "state_class": "measurement",
+      "unique_id": "sg_meter_phase_b_voltage",
+      "unit_of_measurement": "V"
+    }
+  ],
+  "grid_meter_phase_c_active_power": [
+    {
+      "device_class": "power",
+      "domain": "sensor",
+      "entity_id": "sensor.meter_phase_c_active_power",
+      "state_class": "measurement",
+      "unique_id": "sg_meter_phase_c_active_power",
+      "unit_of_measurement": "W"
+    }
+  ],
+  "grid_meter_phase_c_current": [
+    {
+      "device_class": "current",
+      "domain": "sensor",
+      "entity_id": "sensor.meter_phase_c_current",
+      "state_class": "measurement",
+      "unique_id": "sg_meter_phase_c_current",
+      "unit_of_measurement": "A"
+    }
+  ],
+  "grid_meter_phase_c_voltage": [
+    {
+      "device_class": "voltage",
+      "domain": "sensor",
+      "entity_id": "sensor.meter_phase_c_voltage",
+      "state_class": "measurement",
+      "unique_id": "sg_meter_phase_c_voltage",
+      "unit_of_measurement": "V"
+    }
+  ],
+  "info_arm_software": [
+    {
+      "device_class": null,
+      "domain": "sensor",
+      "entity_id": "sensor.sungrow_arm_software",
+      "state_class": null,
+      "unique_id": "sg_arm_software",
+      "unit_of_measurement": null
+    }
+  ],
+  "info_battery_firmware_version": [
+    {
+      "device_class": null,
+      "domain": "sensor",
+      "entity_id": "sensor.battery_firmware_version",
+      "state_class": null,
+      "unique_id": "sg_battery_firmware_version",
+      "unit_of_measurement": null
+    }
+  ],
+  "info_communication_module_firmware_version": [
+    {
+      "device_class": null,
+      "domain": "sensor",
+      "entity_id": "sensor.communication_module_firmware_version",
+      "state_class": null,
+      "unique_id": "sg_communication_module_firmware_version",
+      "unit_of_measurement": null
+    }
+  ],
+  "info_device_type_code_raw": [
+    {
+      "device_class": null,
+      "domain": "sensor",
+      "entity_id": "sensor.sungrow_device_type_code",
+      "state_class": null,
+      "unique_id": "sg_dev_code",
+      "unit_of_measurement": null
+    }
+  ],
+  "info_dsp_software": [
+    {
+      "device_class": null,
+      "domain": "sensor",
+      "entity_id": "sensor.sungrow_dsp_software",
+      "state_class": null,
+      "unique_id": "sg_dsp_software",
+      "unit_of_measurement": null
+    }
+  ],
+  "info_inverter_firmware_version": [
+    {
+      "device_class": null,
+      "domain": "sensor",
+      "entity_id": "sensor.inverter_firmware_version",
+      "state_class": null,
+      "unique_id": "sg_inverter_firmware_version",
+      "unit_of_measurement": null
+    }
+  ],
+  "info_protocol_version_raw": [
+    {
+      "device_class": null,
+      "domain": "sensor",
+      "entity_id": "sensor.sungrow_protocol_version",
+      "state_class": null,
+      "unique_id": "sg_protocol_version",
+      "unit_of_measurement": null
+    }
+  ],
+  "info_rated_output_power": [
+    {
+      "device_class": "power",
+      "domain": "sensor",
+      "entity_id": "sensor.inverter_rated_output",
+      "state_class": "measurement",
+      "unique_id": "sg_inverter_rated_output",
+      "unit_of_measurement": "W"
+    }
+  ],
+  "info_serial_number": [
+    {
+      "device_class": null,
+      "domain": "sensor",
+      "entity_id": "sensor.sungrow_inverter_serial",
+      "state_class": null,
+      "unique_id": "sg_inverter_serial",
+      "unit_of_measurement": null
+    }
+  ],
+  "pv_mppt1_current": [
+    {
+      "device_class": "current",
+      "domain": "sensor",
+      "entity_id": "sensor.mppt1_current",
+      "state_class": "measurement",
+      "unique_id": "sg_mppt1_current",
+      "unit_of_measurement": "A"
+    }
+  ],
+  "pv_mppt1_voltage": [
+    {
+      "device_class": "voltage",
+      "domain": "sensor",
+      "entity_id": "sensor.mppt1_voltage",
+      "state_class": "measurement",
+      "unique_id": "sg_mppt1_voltage",
+      "unit_of_measurement": "V"
+    }
+  ],
+  "pv_mppt2_current": [
+    {
+      "device_class": "current",
+      "domain": "sensor",
+      "entity_id": "sensor.mppt2_current",
+      "state_class": "measurement",
+      "unique_id": "sg_mppt2_current",
+      "unit_of_measurement": "A"
+    }
+  ],
+  "pv_mppt2_voltage": [
+    {
+      "device_class": "voltage",
+      "domain": "sensor",
+      "entity_id": "sensor.mppt2_voltage",
+      "state_class": "measurement",
+      "unique_id": "sg_mppt2_voltage",
+      "unit_of_measurement": "V"
+    }
+  ],
+  "pv_mppt3_current": [
+    {
+      "device_class": "current",
+      "domain": "sensor",
+      "entity_id": "sensor.mppt3_current",
+      "state_class": "measurement",
+      "unique_id": "sg_mppt3_current",
+      "unit_of_measurement": "A"
+    }
+  ],
+  "pv_mppt3_voltage": [
+    {
+      "device_class": "voltage",
+      "domain": "sensor",
+      "entity_id": "sensor.mppt3_voltage",
+      "state_class": "measurement",
+      "unique_id": "sg_mppt3_voltage",
+      "unit_of_measurement": "V"
+    }
+  ],
+  "pv_mppt4_current": [
+    {
+      "device_class": "current",
+      "domain": "sensor",
+      "entity_id": "sensor.mppt4_current",
+      "state_class": "measurement",
+      "unique_id": "sg_mppt4_current",
+      "unit_of_measurement": "A"
+    }
+  ],
+  "pv_mppt4_voltage": [
+    {
+      "device_class": "voltage",
+      "domain": "sensor",
+      "entity_id": "sensor.mppt4_voltage",
+      "state_class": "measurement",
+      "unique_id": "sg_mppt4_voltage",
+      "unit_of_measurement": "V"
+    }
+  ],
+  "pv_total_dc_power": [
+    {
+      "device_class": "power",
+      "domain": "sensor",
+      "entity_id": "sensor.total_dc_power",
+      "state_class": "measurement",
+      "unique_id": "sg_total_dc_power",
+      "unit_of_measurement": "W"
+    }
+  ],
+  "status_phase_a_current": [
+    {
+      "device_class": "current",
+      "domain": "sensor",
+      "entity_id": "sensor.phase_a_current",
+      "state_class": "measurement",
+      "unique_id": "sg_phase_a_current",
+      "unit_of_measurement": "A"
+    }
+  ],
+  "status_phase_a_voltage": [
+    {
+      "device_class": "voltage",
+      "domain": "sensor",
+      "entity_id": "sensor.phase_a_voltage",
+      "state_class": "measurement",
+      "unique_id": "sg_phase_a_voltage",
+      "unit_of_measurement": "V"
+    }
+  ],
+  "status_phase_b_current": [
+    {
+      "device_class": "current",
+      "domain": "sensor",
+      "entity_id": "sensor.phase_b_current",
+      "state_class": "measurement",
+      "unique_id": "sg_phase_b_current",
+      "unit_of_measurement": "A"
+    }
+  ],
+  "status_phase_b_voltage": [
+    {
+      "device_class": "voltage",
+      "domain": "sensor",
+      "entity_id": "sensor.phase_b_voltage",
+      "state_class": "measurement",
+      "unique_id": "sg_phase_b_voltage",
+      "unit_of_measurement": "V"
+    }
+  ],
+  "status_phase_c_current": [
+    {
+      "device_class": "current",
+      "domain": "sensor",
+      "entity_id": "sensor.phase_c_current",
+      "state_class": "measurement",
+      "unique_id": "sg_phase_c_current",
+      "unit_of_measurement": "A"
+    }
+  ],
+  "status_phase_c_voltage": [
+    {
+      "device_class": "voltage",
+      "domain": "sensor",
+      "entity_id": "sensor.phase_c_voltage",
+      "state_class": "measurement",
+      "unique_id": "sg_phase_c_voltage",
+      "unit_of_measurement": "V"
+    }
+  ],
+  "status_power_factor": [
+    {
+      "device_class": null,
+      "domain": "sensor",
+      "entity_id": "sensor.power_factor",
+      "state_class": "measurement",
+      "unique_id": "sg_power_factor",
+      "unit_of_measurement": null
+    }
+  ],
+  "status_power_flow_status_raw": [
+    {
+      "device_class": null,
+      "domain": "sensor",
+      "entity_id": "sensor.power_flow_status",
+      "state_class": "measurement",
+      "unique_id": "uid_power_flow_status",
+      "unit_of_measurement": null
+    }
+  ],
+  "status_reactive_power": [
+    {
+      "device_class": "power",
+      "domain": "sensor",
+      "entity_id": "sensor.reactive_power",
+      "state_class": "measurement",
+      "unique_id": "sg_reactive_power",
+      "unit_of_measurement": "W"
+    }
+  ],
+  "status_running_state": [
+    {
+      "device_class": null,
+      "domain": "sensor",
+      "entity_id": "sensor.running_state_raw",
+      "state_class": "measurement",
+      "unique_id": "uid_sg_running_state_raw",
+      "unit_of_measurement": null
+    }
+  ],
+  "status_temperature": [
+    {
+      "device_class": "temperature",
+      "domain": "sensor",
+      "entity_id": "sensor.inverter_temperature",
+      "state_class": "measurement",
+      "unique_id": "sg_inverter_temperature",
+      "unit_of_measurement": "\u00b0C"
+    }
+  ],
+  "status_total_active_power": [
+    {
+      "device_class": "power",
+      "domain": "sensor",
+      "entity_id": "sensor.total_active_power",
+      "state_class": "measurement",
+      "unique_id": "sg_total_active_power",
+      "unit_of_measurement": "W"
+    }
+  ]
+}

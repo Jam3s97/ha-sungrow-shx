@@ -92,12 +92,14 @@ def test_native_unit_and_device_class_no_unit_no_hint() -> None:
 
 
 def test_state_class_for_total_increasing_energy() -> None:
-    field = _field("total_pv_generation", component="energy", unit="kWh")
+    """Daily counters reset to ~0 each day -- total_increasing handles that reset."""
+    field = _field("daily_pv_generation", component="energy", unit="kWh")
     assert state_class_for(field) is SensorStateClass.TOTAL_INCREASING
 
 
 def test_state_class_for_non_total_energy() -> None:
-    field = _field("daily_pv_generation", component="energy", unit="kWh")
+    """Lifetime counters only reset rarely (firmware/meter swap) -- plain total."""
+    field = _field("total_pv_generation", component="energy", unit="kWh")
     assert state_class_for(field) is SensorStateClass.TOTAL
 
 
