@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+# Sync custom_components/sungrow/sungrow_modbus/ from the upstream
+# sungrow-modbus device library (github.com/Jam3s97/sungrow-modbus), which
+# this integration vendors rather than depends on via PyPI -- see README.md.
+#
+# Usage: scripts/sync-vendor [ref]
+#   ref  Branch, tag, or commit to sync from (default: main).
+#
+# Copies src/sungrow_modbus/ from the upstream repo over
+# custom_components/sungrow/sungrow_modbus/, deleting any local files that
+# no longer exist upstream. Review the resulting diff, run scripts/lint
+# (sungrow_modbus/ is excluded from reformatting, see .ruff.toml, but the
+# rest of the tree may need `ruff check --fix` if e.g. an import changed),
+# and smoke-test with scripts/develop before committing.
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+REF="${1:-main}"
+UPSTREAM="https://github.com/Jam3s97/sungrow-modbus.git"
+VENDOR_DIR="custom_components/sungrow/sungrow_modbus"
+CLONE_DIR="$(mktemp -d)"
+trap 'rm -rf "$CLONE_DIR"' EXIT
+
+echo "Cloning $UPSTREAM @ $REF..."
+git clone --quiet --depth 1 --branch "$REF" "$UPSTREAM" "$CLONE_DIR"
+
+rsync \
+    --archive \
+    --delete \
+    --exclude='__pycache__' \
+    --exclude='.pytest_cache' \
+    "$CLONE_DIR/src/sungrow_modbus/" \
+    "$VENDOR_DIR/"
+
+echo
+echo "Synced from $REF. Review before committing:"
+git status --short -- "$VENDOR_DIR"
