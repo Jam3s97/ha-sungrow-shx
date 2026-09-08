@@ -9,7 +9,7 @@ homeassistant:
     # migration path against the `sungrow` config-entry integration. See
     # config/legacy_migration_package.yaml for the connection-contention
     # caveat before enabling both against real hardware.
-    legacy_sungrow: !include legacy_migration_package.yaml
+    legacy_sungrow: !include integrations/legacy_migration_package.yaml
 
 # https://www.home-assistant.io/integrations/logger/
 logger:
