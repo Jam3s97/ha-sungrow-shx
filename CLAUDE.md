@@ -78,14 +78,22 @@ statistics (see `unit_mapping.py`'s `state_class_for` -- daily counters need
 `total_increasing` since they reset each day, lifetime counters need plain
 `total`, backwards until this was caught by the generator).
 
-Every install goes through `config_flow.py::async_step_legacy_naming` after
-the connection step, asking whether to keep the legacy package's flat
-`entity_id`s (recommended only when replacing an existing YAML install, to
-keep its automations/dashboards working) or this integration's modern
-device-prefixed ones (the default, and the recommended choice for everyone
-else). **This choice is made once and is permanent** -- there is no options
-flow or reconfigure step for it, and none should be added; changing it means
-removing and re-adding the integration. It works by setting `self.entity_id`
+Every install goes through two config-flow steps after the connection step:
+`async_step_migrating` ("are you migrating from the legacy YAML package?" --
+a plain yes/no, not stored in the entry, it only routes whether the second
+step shows at all) and, if yes, `async_step_legacy_naming` (keep the legacy
+package's flat `entity_id`s, recommended only when replacing an existing
+YAML install to keep its automations/dashboards working, or this
+integration's modern device-prefixed ones, the default). **This choice is
+made once and is permanent** -- there is no options flow or reconfigure step
+for it, and none should be added; changing it means removing and re-adding
+the integration. `async_step_legacy_naming` also hard-blocks (a red
+`legacy_entities_active` form error, not just a warning) submitting "keep
+legacy ids" while any of those ids are still live in the entity registry --
+claiming would otherwise silently land on `sensor.foo_2` instead of
+`sensor.foo`, defeating the entire point. Choosing modern ids is never
+blocked, since nothing is being claimed in that case. It works by setting
+`self.entity_id`
 directly in `SungrowEntity.__init__` (`entity.py`) when
 `legacy_naming.suggested_object_id_for(key, platform)` finds a same-domain
 match -- **not** `_attr_suggested_object_id`, which looks like the obvious
@@ -119,8 +127,10 @@ against the same physical inverter means two competing sessions; fine for
 brief side-by-side comparison, not for leaving both enabled long-term. To
 actually test a migration, remove/disable the legacy package and restart HA
 first -- an entity_id can't be claimed out from under a still-live entity
-holding it, and the config flow's registry pre-check only warns about this,
-it doesn't block on it.
+holding it. Restarting stops HA recreating those entities but does not
+delete their existing registry rows; if any remain (Settings → Devices &
+Services → Entities, filter by the `modbus`/`template` integrations) the
+`legacy_naming` step's hard block will catch it and say so.
 
 ## Conventions
 

@@ -69,11 +69,10 @@ async def test_tcp_flow_creates_entry(
         result["flow_id"],
         {CONF_HOST: "10.0.0.5", CONF_PORT: DEFAULT_PORT, CONF_UNIT_ID: DEFAULT_UNIT_ID},
     )
-    assert result["step_id"] == "legacy_naming"
-    assert result["description_placeholders"] == {"legacy_warning": ""}
+    assert result["step_id"] == "migrating"
 
     result = await hass.config_entries.flow.async_configure(
-        result["flow_id"], {CONF_LEGACY_NAMING: False}
+        result["flow_id"], {"migrating_from_legacy": False}
     )
     await hass.async_block_till_done()
 
@@ -81,6 +80,34 @@ async def test_tcp_flow_creates_entry(
     assert result["title"] == "SH10RT"
     assert result["data"][CONF_HOST] == "10.0.0.5"
     assert result["data"][CONF_MODBUS_TYPE] == MODBUS_TYPE_TCP
+    assert result["data"][CONF_LEGACY_NAMING] is False
+
+
+async def test_not_migrating_skips_legacy_naming_step(
+    hass: HomeAssistant,
+    loaded_unit: MockModbusUnit,
+    patch_async_get_temporary_unit: Callable[[MockModbusUnit], None],
+    patch_async_get_unit: Callable[[MockModbusUnit], None],
+) -> None:
+    """Answering "no" to the migration question never shows the naming step."""
+    patch_async_get_temporary_unit(loaded_unit)
+    patch_async_get_unit(loaded_unit)
+
+    result = await hass.config_entries.flow.async_init(
+        DOMAIN, context={"source": SOURCE_USER}
+    )
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"], {CONF_MODBUS_TYPE: MODBUS_TYPE_TCP}
+    )
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"],
+        {CONF_HOST: "10.0.0.5", CONF_PORT: DEFAULT_PORT, CONF_UNIT_ID: DEFAULT_UNIT_ID},
+    )
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"], {"migrating_from_legacy": False}
+    )
+
+    assert result["type"] is FlowResultType.CREATE_ENTRY
     assert result["data"][CONF_LEGACY_NAMING] is False
 
 
@@ -105,9 +132,56 @@ async def test_legacy_naming_step_warns_of_active_legacy_entities(
         result["flow_id"],
         {CONF_HOST: "10.0.0.5", CONF_PORT: DEFAULT_PORT, CONF_UNIT_ID: DEFAULT_UNIT_ID},
     )
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"], {"migrating_from_legacy": True}
+    )
 
     assert result["step_id"] == "legacy_naming"
     assert result["description_placeholders"]["legacy_warning"] != ""
+
+
+async def test_legacy_naming_blocks_claim_while_legacy_entities_active(
+    hass: HomeAssistant,
+    loaded_unit: MockModbusUnit,
+    patch_async_get_temporary_unit: Callable[[MockModbusUnit], None],
+    patch_async_get_unit: Callable[[MockModbusUnit], None],
+) -> None:
+    """Trying to claim legacy ids while the old entities are still live is refused."""
+    patch_async_get_temporary_unit(loaded_unit)
+    patch_async_get_unit(loaded_unit)
+    registry = er.async_get(hass)
+    registry.async_get_or_create(
+        "sensor", "modbus", "sg_total_dc_power", suggested_object_id="total_dc_power"
+    )
+
+    result = await hass.config_entries.flow.async_init(
+        DOMAIN, context={"source": SOURCE_USER}
+    )
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"], {CONF_MODBUS_TYPE: MODBUS_TYPE_TCP}
+    )
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"],
+        {CONF_HOST: "10.0.0.5", CONF_PORT: DEFAULT_PORT, CONF_UNIT_ID: DEFAULT_UNIT_ID},
+    )
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"], {"migrating_from_legacy": True}
+    )
+
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"], {CONF_LEGACY_NAMING: True}
+    )
+    assert result["type"] is FlowResultType.FORM
+    assert result["step_id"] == "legacy_naming"
+    assert result["errors"] == {"base": "legacy_entities_active"}
+
+    # Choosing modern ids instead is never blocked -- nothing to claim.
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"], {CONF_LEGACY_NAMING: False}
+    )
+    await hass.async_block_till_done()
+    assert result["type"] is FlowResultType.CREATE_ENTRY
+    assert result["data"][CONF_LEGACY_NAMING] is False
 
 
 async def test_serial_flow_creates_entry(
@@ -137,6 +211,11 @@ async def test_serial_flow_creates_entry(
             CONF_SERIAL_BYTESIZE: str(DEFAULT_BYTESIZE),
             CONF_UNIT_ID: DEFAULT_UNIT_ID,
         },
+    )
+    assert result["step_id"] == "migrating"
+
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"], {"migrating_from_legacy": True}
     )
     assert result["step_id"] == "legacy_naming"
 

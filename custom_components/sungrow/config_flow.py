@@ -78,11 +78,16 @@ STEP_SERIAL = vol.Schema(
     }
 )
 
-# Default False: modern, device-prefixed entity ids are the recommended
-# choice. Legacy ids are only for keeping existing automations/dashboards
-# from a prior YAML-package install working unchanged -- see
-# translations/en.json's "legacy_naming" step copy.
-STEP_LEGACY_NAMING = vol.Schema({vol.Required(CONF_LEGACY_NAMING, default=False): bool})
+# Flow-internal only -- not stored in the config entry. Just routes whether
+# async_step_legacy_naming is shown at all; a "no" here is equivalent to
+# CONF_LEGACY_NAMING=False without asking a second question.
+_KEY_MIGRATING = "migrating_from_legacy"
+STEP_MIGRATING = vol.Schema({vol.Required(_KEY_MIGRATING, default=False): bool})
+
+# Default True here (unlike the migrating question above): by the time this
+# step shows, the user has already said they're migrating, so keeping the
+# legacy ids is the sensible default -- see translations/en.json.
+STEP_LEGACY_NAMING = vol.Schema({vol.Required(CONF_LEGACY_NAMING, default=True): bool})
 
 
 class SungrowConfigFlow(ConfigFlow, domain=DOMAIN):
@@ -137,24 +142,42 @@ class SungrowConfigFlow(ConfigFlow, domain=DOMAIN):
             else:
                 self._pending_data = data
                 self._pending_title = title
-                return await self.async_step_legacy_naming()
+                return await self.async_step_migrating()
         return self.async_show_form(step_id=step_id, data_schema=schema, errors=errors)
+
+    async def async_step_migrating(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Ask whether this is a migration from the legacy YAML package."""
+        if user_input is not None:
+            if not user_input[_KEY_MIGRATING]:
+                data = {**self._pending_data, CONF_LEGACY_NAMING: False}
+                return self.async_create_entry(title=self._pending_title, data=data)
+            return await self.async_step_legacy_naming()
+        return self.async_show_form(step_id="migrating", data_schema=STEP_MIGRATING)
 
     async def async_step_legacy_naming(
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
         """Ask whether to keep the legacy YAML package's entity ids."""
-        if user_input is not None:
-            data = {**self._pending_data, **user_input}
-            return self.async_create_entry(title=self._pending_title, data=data)
-
-        warning = ""
         registry = er.async_get(self.hass)
         active = [
             entity_id
             for entity_id in legacy_naming.all_legacy_entity_ids()
             if registry.async_is_registered(entity_id)
         ]
+
+        errors: dict[str, str] = {}
+        if user_input is not None:
+            if user_input[CONF_LEGACY_NAMING] and active:
+                # Claiming would silently land on sensor.foo_2 instead of
+                # sensor.foo -- refuse rather than let that happen quietly.
+                errors["base"] = "legacy_entities_active"
+            else:
+                data = {**self._pending_data, **user_input}
+                return self.async_create_entry(title=self._pending_title, data=data)
+
+        warning = ""
         if active:
             warning = (
                 f"\n\n{len(active)} legacy entities are still registered "
@@ -166,6 +189,7 @@ class SungrowConfigFlow(ConfigFlow, domain=DOMAIN):
             step_id="legacy_naming",
             data_schema=STEP_LEGACY_NAMING,
             description_placeholders={"legacy_warning": warning},
+            errors=errors,
         )
 
     async def _async_title(self, data: dict[str, Any]) -> str | None:

@@ -53,6 +53,6 @@ def test_committed_json_is_up_to_date() -> None:
     entity_map, _coverage = generator.build_map()
     rendered = json.dumps(entity_map, indent=2, sort_keys=True) + "\n"
     current = OUTPUT.read_text(encoding="utf-8") if OUTPUT.exists() else ""
-    assert (
-        current == rendered
-    ), "run scripts/generate_legacy_entity_map.py to refresh it"
+    assert current == rendered, (
+        "run scripts/generate_legacy_entity_map.py to refresh it"
+    )
