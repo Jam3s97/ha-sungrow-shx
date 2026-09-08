@@ -11,4 +11,4 @@ pytest-homeassistant-custom-component==0.13.363
 # pool -- HA installs it automatically at runtime, but the test environment
 # needs it pinned explicitly. Keep this in sync with
 # homeassistant/components/modbus/manifest.json for the pinned HA version.
-pymodbus==3.13.1
+pymodbus==3.15.0
