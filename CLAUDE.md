@@ -132,6 +132,31 @@ delete their existing registry rows; if any remain (Settings → Devices &
 Services → Entities, filter by the `modbus`/`template` integrations) the
 `legacy_naming` step's hard block will catch it and say so.
 
+**Future feature: preserve statistics when migrating to modern ids.**
+Today, migrating with "keep legacy ids" unticked gives fresh modern entities
+with no connection to the old data -- years of recorder history and
+long-term statistics stay parked under the abandoned legacy ids. mkaiser's
+own docs describe the fix: claim the legacy id first (as `legacy_naming`
+already does), then immediately **rename** that same entity forward to its
+natural modern id. A same-`unique_id` rename carries both raw history and
+long-term statistics with it, unlike creating a fresh entity. Sketch of what
+this needs, not yet built:
+
+- The "migrating?" answer would need to be persisted (it's currently
+  flow-local only, just routing whether `async_step_legacy_naming` shows) so
+  `entity.py` knows to force-claim the legacy id even when the final choice
+  is modern.
+- The rename to the natural modern id should use HA's own
+  `entity_registry.async_regenerate_entity_id()` rather than reimplementing
+  `has_entity_name`'s device-prefixing logic by hand -- fragile and liable to
+  drift from actual HA behavior.
+- This can only run after entities are registered, so in
+  `__init__.py::async_setup_entry` after platform setup, not in
+  `SungrowEntity.__init__`.
+- Must be strictly one-time (persist a "migration rename done" marker in
+  entry data) -- rerunning on every restart would be wasted work at best and
+  risk thrashing ids at worst.
+
 ## Conventions
 
 - Config is UI-only (config flow), no YAML setup.
