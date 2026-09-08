@@ -11,6 +11,7 @@ from homeassistant.components.sensor import (
     SensorEntity,
     SensorEntityDescription,
 )
+from homeassistant.const import Platform
 
 from .entity import SungrowEntity
 from .field_index import FieldRef, iter_fields
@@ -99,7 +100,9 @@ class SungrowSensor(SungrowEntity, SensorEntity):
         description: SungrowSensorDescription,
     ) -> None:
         """Initialize the sensor."""
-        super().__init__(coordinator, description.key, description.component)
+        super().__init__(
+            coordinator, description.key, description.component, Platform.SENSOR.value
+        )
         self.entity_description = description
 
     @property

@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 from homeassistant.components.switch import SwitchEntity, SwitchEntityDescription
+from homeassistant.const import Platform
 
 from .entity import SungrowEntity
 from .field_index import FieldRef, iter_fields
@@ -65,7 +66,9 @@ class SungrowSwitch(SungrowEntity, SwitchEntity):
         description: SungrowSwitchDescription,
     ) -> None:
         """Initialize the switch."""
-        super().__init__(coordinator, description.key, description.component)
+        super().__init__(
+            coordinator, description.key, description.component, Platform.SWITCH.value
+        )
         self.entity_description = description
 
     @property

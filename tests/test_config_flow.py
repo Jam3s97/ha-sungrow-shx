@@ -7,10 +7,12 @@ from typing import TYPE_CHECKING
 from homeassistant.config_entries import SOURCE_USER
 from homeassistant.const import CONF_HOST, CONF_PORT
 from homeassistant.data_entry_flow import FlowResultType
+from homeassistant.helpers import entity_registry as er
 from modbus_connection import ModbusError
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.sungrow.const import (
+    CONF_LEGACY_NAMING,
     CONF_MODBUS_TYPE,
     CONF_SERIAL_BAUDRATE,
     CONF_SERIAL_BYTESIZE,
@@ -67,12 +69,45 @@ async def test_tcp_flow_creates_entry(
         result["flow_id"],
         {CONF_HOST: "10.0.0.5", CONF_PORT: DEFAULT_PORT, CONF_UNIT_ID: DEFAULT_UNIT_ID},
     )
+    assert result["step_id"] == "legacy_naming"
+    assert result["description_placeholders"] == {"legacy_warning": ""}
+
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"], {CONF_LEGACY_NAMING: False}
+    )
     await hass.async_block_till_done()
 
     assert result["type"] is FlowResultType.CREATE_ENTRY
     assert result["title"] == "SH10RT"
     assert result["data"][CONF_HOST] == "10.0.0.5"
     assert result["data"][CONF_MODBUS_TYPE] == MODBUS_TYPE_TCP
+    assert result["data"][CONF_LEGACY_NAMING] is False
+
+
+async def test_legacy_naming_step_warns_of_active_legacy_entities(
+    hass: HomeAssistant,
+    loaded_unit: MockModbusUnit,
+    patch_async_get_temporary_unit: Callable[[MockModbusUnit], None],
+) -> None:
+    patch_async_get_temporary_unit(loaded_unit)
+    registry = er.async_get(hass)
+    registry.async_get_or_create(
+        "sensor", "modbus", "sg_total_dc_power", suggested_object_id="total_dc_power"
+    )
+
+    result = await hass.config_entries.flow.async_init(
+        DOMAIN, context={"source": SOURCE_USER}
+    )
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"], {CONF_MODBUS_TYPE: MODBUS_TYPE_TCP}
+    )
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"],
+        {CONF_HOST: "10.0.0.5", CONF_PORT: DEFAULT_PORT, CONF_UNIT_ID: DEFAULT_UNIT_ID},
+    )
+
+    assert result["step_id"] == "legacy_naming"
+    assert result["description_placeholders"]["legacy_warning"] != ""
 
 
 async def test_serial_flow_creates_entry(
@@ -103,10 +138,16 @@ async def test_serial_flow_creates_entry(
             CONF_UNIT_ID: DEFAULT_UNIT_ID,
         },
     )
+    assert result["step_id"] == "legacy_naming"
+
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"], {CONF_LEGACY_NAMING: True}
+    )
     await hass.async_block_till_done()
 
     assert result["type"] is FlowResultType.CREATE_ENTRY
     assert result["data"][CONF_MODBUS_TYPE] == MODBUS_TYPE_SERIAL
+    assert result["data"][CONF_LEGACY_NAMING] is True
 
 
 async def test_cannot_connect_re_shows_form_with_error(

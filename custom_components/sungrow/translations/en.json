@@ -33,6 +33,13 @@
           "host": "Serial device path, e.g. /dev/ttyUSB0.",
           "unit_id": "The inverter's Modbus station address (default: 1)."
         }
+      },
+      "legacy_naming": {
+        "title": "Entity naming",
+        "description": "Modern, device-prefixed entity ids (e.g. `sensor.sh10rt_total_dc_power`) are recommended. Only choose legacy ids if you're replacing an existing YAML Modbus package installation and want your current automations and dashboards to keep working unchanged, since they use its flat ids (e.g. `sensor.total_dc_power`). **This choice cannot be changed later** -- remove and re-add the integration to change it.{legacy_warning}",
+        "data": {
+          "legacy_naming": "Keep the YAML package's entity ids"
+        }
       }
     },
     "error": {

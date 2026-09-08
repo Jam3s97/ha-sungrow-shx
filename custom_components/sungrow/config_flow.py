@@ -9,6 +9,7 @@ from homeassistant.components.modbus import async_get_temporary_unit
 from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
 from homeassistant.const import CONF_HOST, CONF_PORT
 from homeassistant.exceptions import HomeAssistantError
+from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.selector import (
     NumberSelector,
     NumberSelectorConfig,
@@ -18,7 +19,9 @@ from homeassistant.helpers.selector import (
 )
 from modbus_connection import ModbusError
 
+from . import legacy_naming
 from .const import (
+    CONF_LEGACY_NAMING,
     CONF_MODBUS_TYPE,
     CONF_SERIAL_BAUDRATE,
     CONF_SERIAL_BYTESIZE,
@@ -75,6 +78,12 @@ STEP_SERIAL = vol.Schema(
     }
 )
 
+# Default False: modern, device-prefixed entity ids are the recommended
+# choice. Legacy ids are only for keeping existing automations/dashboards
+# from a prior YAML-package install working unchanged -- see
+# translations/en.json's "legacy_naming" step copy.
+STEP_LEGACY_NAMING = vol.Schema({vol.Required(CONF_LEGACY_NAMING, default=False): bool})
+
 
 class SungrowConfigFlow(ConfigFlow, domain=DOMAIN):
     """Handle a config flow for the Sungrow custom integration."""
@@ -84,6 +93,8 @@ class SungrowConfigFlow(ConfigFlow, domain=DOMAIN):
     def __init__(self) -> None:
         """Initialize the flow."""
         self._modbus_type: str = MODBUS_TYPE_TCP
+        self._pending_data: dict[str, Any] = {}
+        self._pending_title: str = ""
 
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
@@ -124,8 +135,38 @@ class SungrowConfigFlow(ConfigFlow, domain=DOMAIN):
             if (title := await self._async_title(data)) is None:
                 errors["base"] = "cannot_connect"
             else:
-                return self.async_create_entry(title=title, data=data)
+                self._pending_data = data
+                self._pending_title = title
+                return await self.async_step_legacy_naming()
         return self.async_show_form(step_id=step_id, data_schema=schema, errors=errors)
+
+    async def async_step_legacy_naming(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Ask whether to keep the legacy YAML package's entity ids."""
+        if user_input is not None:
+            data = {**self._pending_data, **user_input}
+            return self.async_create_entry(title=self._pending_title, data=data)
+
+        warning = ""
+        registry = er.async_get(self.hass)
+        active = [
+            entity_id
+            for entity_id in legacy_naming.all_legacy_entity_ids()
+            if registry.async_is_registered(entity_id)
+        ]
+        if active:
+            warning = (
+                f"\n\n{len(active)} legacy entities are still registered "
+                "(e.g. from the YAML package). Remove it and restart Home "
+                "Assistant first, or your old entity ids may not be free to "
+                "claim."
+            )
+        return self.async_show_form(
+            step_id="legacy_naming",
+            data_schema=STEP_LEGACY_NAMING,
+            description_placeholders={"legacy_warning": warning},
+        )
 
     async def _async_title(self, data: dict[str, Any]) -> str | None:
         """Read the inverter model over a temporary Modbus unit, for the entry title."""

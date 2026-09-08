@@ -18,7 +18,7 @@ from homeassistant.components.button import (
     ButtonEntity,
     ButtonEntityDescription,
 )
-from homeassistant.const import EntityCategory
+from homeassistant.const import EntityCategory, Platform
 
 from .entity import SungrowEntity
 
@@ -80,7 +80,7 @@ class SungrowButton(SungrowEntity, ButtonEntity):
         description: SungrowButtonDescription,
     ) -> None:
         """Initialize the button."""
-        super().__init__(coordinator, description.key, "info")
+        super().__init__(coordinator, description.key, "info", Platform.BUTTON.value)
         self.entity_description = description
 
     async def async_press(self) -> None:
