@@ -157,6 +157,17 @@ this needs, not yet built:
   entry data) -- rerunning on every restart would be wasted work at best and
   risk thrashing ids at worst.
 
+**Open question: `battery_capacity_high_precision`'s `device_class`.**
+Flagged (not fixed) in `scripts/generate_legacy_entity_map.py`'s
+`_ACKNOWLEDGED_MISMATCHES`: the legacy YAML uses `device_class: energy_storage`
+for this field (a capacity gauge -- how much the battery can hold), while
+`unit_mapping.py` maps every kWh field to plain `energy` regardless of
+whether it's a flow/meter or a snapshot/gauge. `energy_storage` is likely
+the more correct class here, but fixing `unit_mapping.py`'s kWh handling to
+distinguish the two needs its own design pass (what signal marks a field as
+a gauge rather than a meter -- `category`? an explicit hint on the field
+helper?), not a one-line swap like the `state_class_for` fix was.
+
 ## Conventions
 
 - Config is UI-only (config flow), no YAML setup.
