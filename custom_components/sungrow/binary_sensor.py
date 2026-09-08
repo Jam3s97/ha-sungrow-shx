@@ -10,6 +10,7 @@ from homeassistant.components.binary_sensor import (
     BinarySensorEntity,
     BinarySensorEntityDescription,
 )
+from homeassistant.const import Platform
 
 from .entity import SungrowEntity
 
@@ -88,7 +89,9 @@ class SungrowBinarySensor(SungrowEntity, BinarySensorEntity):
         # they are not tied to a single "component" the way SungrowEntity
         # normally expects; pass "info" purely so the base class's __init__
         # has something to look up (unused after init, see _subsystem below).
-        super().__init__(coordinator, description.key, "info")
+        super().__init__(
+            coordinator, description.key, "info", Platform.BINARY_SENSOR.value
+        )
         self.entity_description = description
 
     @property

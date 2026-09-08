@@ -57,6 +57,66 @@ _ACKNOWLEDGED_MISMATCHES: dict[str, str] = {
     ),
 }
 
+# binary_sensor.py's computed flags and button.py's start/stop actions aren't
+# declared register fields (they have no sungrow_metadata, so iter_fields()
+# never yields them) -- they're hand-authored in those platform modules,
+# matched here by hand against the legacy YAML's `template: binary_sensor:`
+# and `template: button:` blocks instead of by address. `is_running` has no
+# legacy equivalent (the legacy package's closest thing is an enum sensor,
+# not a binary flag) and is deliberately omitted.
+_MANUAL_LEGACY_OVERRIDES: dict[str, list[dict[str, Any]]] = {
+    "is_pv_generating": [
+        {
+            "domain": "binary_sensor",
+            "entity_id": "binary_sensor.pv_generating",
+            "unique_id": "sg_pv_generating",
+            "unit_of_measurement": None,
+            "device_class": None,
+            "state_class": None,
+        }
+    ],
+    "is_battery_charging": [
+        {
+            "domain": "binary_sensor",
+            "entity_id": "binary_sensor.battery_charging",
+            "unique_id": "sg_battery_charging",
+            "unit_of_measurement": None,
+            "device_class": None,
+            "state_class": None,
+        }
+    ],
+    "is_importing_from_grid": [
+        {
+            "domain": "binary_sensor",
+            "entity_id": "binary_sensor.importing_power",
+            "unique_id": "sg_importing_power",
+            "unit_of_measurement": None,
+            "device_class": None,
+            "state_class": None,
+        }
+    ],
+    "start_inverter": [
+        {
+            "domain": "button",
+            "entity_id": "button.start_inverter",
+            "unique_id": "uid_start_inverter",
+            "unit_of_measurement": None,
+            "device_class": None,
+            "state_class": None,
+        }
+    ],
+    "stop_inverter": [
+        {
+            "domain": "button",
+            "entity_id": "button.stop_inverter",
+            "unique_id": "uid_stop_inverter",
+            "unit_of_measurement": None,
+            "device_class": None,
+            "state_class": None,
+        }
+    ],
+}
+
 
 class _LegacyLoader(yaml.SafeLoader):
     """
@@ -246,6 +306,8 @@ def build_map() -> tuple[dict[str, list[dict[str, Any]]], Coverage]:
 
     for candidates in remaining_legacy.values():
         coverage.legacy_only.extend(candidates)
+
+    result.update(_MANUAL_LEGACY_OVERRIDES)
 
     return result, coverage
 

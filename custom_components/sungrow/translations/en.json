@@ -33,10 +33,25 @@
           "host": "Serial device path, e.g. /dev/ttyUSB0.",
           "unit_id": "The inverter's Modbus station address (default: 1)."
         }
+      },
+      "migrating": {
+        "title": "Are you migrating from the legacy YAML Modbus package?",
+        "description": "Check this if you previously set this inverter up with the YAML Modbus package (`modbus_sungrow.yaml`) and want to bring its entities across. Leave unchecked for a new setup.",
+        "data": {
+          "migrating_from_legacy": "I'm migrating from the legacy YAML package"
+        }
+      },
+      "legacy_naming": {
+        "title": "Keep the legacy package's entity ids?",
+        "description": "Keep its entity ids (e.g. `sensor.total_dc_power`) so your existing automations and dashboards keep working unchanged -- recommended. Uncheck to switch to this integration's modern, device-prefixed ids instead (e.g. `sensor.sh10rt_total_dc_power`), which will break any references to the old ids. **This choice cannot be changed later** -- remove and re-add the integration to change it.{legacy_warning}",
+        "data": {
+          "legacy_naming": "Keep the YAML package's entity ids"
+        }
       }
     },
     "error": {
-      "cannot_connect": "Failed to connect. Check the connection details and that the inverter is reachable."
+      "cannot_connect": "Failed to connect. Check the connection details and that the inverter is reachable.",
+      "legacy_entities_active": "Can't claim the legacy ids yet -- entities from the YAML package are still registered. Remove it, restart Home Assistant, and if any remain, delete them under Settings → Devices & Services → Entities, then come back to this step."
     },
     "abort": {
       "already_configured": "This inverter is already configured."

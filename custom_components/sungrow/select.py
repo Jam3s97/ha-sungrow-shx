@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 from homeassistant.components.select import SelectEntity, SelectEntityDescription
+from homeassistant.const import Platform
 
 from .entity import SungrowEntity
 from .field_index import FieldRef, iter_fields
@@ -68,7 +69,9 @@ class SungrowSelect(SungrowEntity, SelectEntity):
         description: SungrowSelectDescription,
     ) -> None:
         """Initialize the select entity."""
-        super().__init__(coordinator, description.key, description.component)
+        super().__init__(
+            coordinator, description.key, description.component, Platform.SELECT.value
+        )
         self.entity_description = description
 
     @property

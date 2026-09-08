@@ -16,6 +16,7 @@ CONF_SERIAL_PARITY: Final = "parity"
 CONF_SERIAL_BAUDRATE: Final = "baudrate"
 CONF_SERIAL_STOPBITS: Final = "stopbits"
 CONF_SERIAL_BYTESIZE: Final = "bytesize"
+CONF_LEGACY_NAMING: Final = "legacy_naming"
 
 MODBUS_TYPE_TCP: Final = "tcp"
 MODBUS_TYPE_SERIAL: Final = "serial"

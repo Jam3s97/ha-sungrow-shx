@@ -10,6 +10,7 @@ from homeassistant.components.number import (
     NumberEntityDescription,
     NumberMode,
 )
+from homeassistant.const import Platform
 
 from .entity import SungrowEntity
 from .field_index import FieldRef, iter_fields
@@ -75,7 +76,9 @@ class SungrowNumber(SungrowEntity, NumberEntity):
         description: SungrowNumberDescription,
     ) -> None:
         """Initialize the number entity."""
-        super().__init__(coordinator, description.key, description.component)
+        super().__init__(
+            coordinator, description.key, description.component, Platform.NUMBER.value
+        )
         self.entity_description = description
 
     @property

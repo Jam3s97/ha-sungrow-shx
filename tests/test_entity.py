@@ -19,7 +19,7 @@ async def test_entity_identity_and_device_info(
 ) -> None:
     mock_config_entry.add_to_hass(hass)
     coordinator = SungrowDataUpdateCoordinator(hass, mock_config_entry, device)
-    entity = SungrowEntity(coordinator, "pv_mppt1_voltage", "pv")
+    entity = SungrowEntity(coordinator, "pv_mppt1_voltage", "pv", "sensor")
 
     assert entity.unique_id == f"{mock_config_entry.entry_id}_pv_mppt1_voltage"
     assert entity._subsystem is device.pv  # noqa: SLF001

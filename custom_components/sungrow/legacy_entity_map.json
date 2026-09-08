@@ -763,6 +763,36 @@
       "unit_of_measurement": null
     }
   ],
+  "is_battery_charging": [
+    {
+      "device_class": null,
+      "domain": "binary_sensor",
+      "entity_id": "binary_sensor.battery_charging",
+      "state_class": null,
+      "unique_id": "sg_battery_charging",
+      "unit_of_measurement": null
+    }
+  ],
+  "is_importing_from_grid": [
+    {
+      "device_class": null,
+      "domain": "binary_sensor",
+      "entity_id": "binary_sensor.importing_power",
+      "state_class": null,
+      "unique_id": "sg_importing_power",
+      "unit_of_measurement": null
+    }
+  ],
+  "is_pv_generating": [
+    {
+      "device_class": null,
+      "domain": "binary_sensor",
+      "entity_id": "binary_sensor.pv_generating",
+      "state_class": null,
+      "unique_id": "sg_pv_generating",
+      "unit_of_measurement": null
+    }
+  ],
   "pv_mppt1_current": [
     {
       "device_class": "current",
@@ -851,6 +881,16 @@
       "state_class": "measurement",
       "unique_id": "sg_total_dc_power",
       "unit_of_measurement": "W"
+    }
+  ],
+  "start_inverter": [
+    {
+      "device_class": null,
+      "domain": "button",
+      "entity_id": "button.start_inverter",
+      "state_class": null,
+      "unique_id": "uid_start_inverter",
+      "unit_of_measurement": null
     }
   ],
   "status_phase_a_current": [
@@ -971,6 +1011,16 @@
       "state_class": "measurement",
       "unique_id": "sg_total_active_power",
       "unit_of_measurement": "W"
+    }
+  ],
+  "stop_inverter": [
+    {
+      "device_class": null,
+      "domain": "button",
+      "entity_id": "button.stop_inverter",
+      "state_class": null,
+      "unique_id": "uid_stop_inverter",
+      "unit_of_measurement": null
     }
   ]
 }
