@@ -3,7 +3,7 @@
 # Pinned to the same Home Assistant release as requirements_dev.txt (see
 # https://pypi.org/project/pytest-homeassistant-custom-component/ for the
 # version <-> homeassistant-release mapping); bump both together.
-pytest-homeassistant-custom-component==0.13.363
+pytest-homeassistant-custom-component==0.13.364
 
 # Our manifest declares a hard dependency on HA core's "modbus" component
 # (see CLAUDE.md); its manifest in turn requires pymodbus even though this
